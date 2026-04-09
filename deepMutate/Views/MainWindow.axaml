@@ -22,7 +22,7 @@
 
         <TextBlock Text="Data found:" FontWeight="Bold"/>
         
-        <!-- Liste der Dateien -->
+        <!-- List of data -->
         <ListBox ItemsSource="{Binding FoundFiles}" Height="200">
             <ListBox.ItemTemplate>
                 <DataTemplate>

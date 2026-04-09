@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using deepMutate.Models.Data;
 using Avalonia.Controls;
+using System;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
@@ -41,8 +42,43 @@ public partial class MainWindowViewModel : ViewModelBase
             FoundFiles.Clear();
             foreach (var file in files)
             {
-                FoundFiles.Add(Path.GetFileName(file)); 
+                FoundFiles.Add(Path.GetFileName(file));
             }
         }
     }
+
+    [RelayCommand]
+    public async Task MutateFilesAsync()
+    {
+        // has a folder been selected
+        if (string.IsNullOrEmpty(SelectedFolderPath)) return;
+
+        // set folder path
+        string outputFolder = Path.Combine(SelectedFolderPath, "bin");
+
+        // create folder if it doesn't exist yet
+        if (!Directory.Exists(outputFolder))
+        {
+            Directory.CreateDirectory(outputFolder);
+        }
+
+        var manager = new FileManager();
+        var files = manager.GetFilesInFolder(SelectedFolderPath);
+
+        foreach (var file in files)
+        {
+            // fetch filename without old path
+            string fileName = Path.GetFileName(file);
+
+            // create new target path in /bin
+            string targetPath = Path.Combine(outputFolder, fileName + ".bin");
+
+            // start conversion
+            await Task.Run(() => manager.ConvertFileToBinaryText(file, targetPath));
+        }
+
+        Console.WriteLine($"Debug All data has been converted to binary (directory: {outputFolder})");
+    }
+
+
 }
