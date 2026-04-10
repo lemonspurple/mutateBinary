@@ -82,7 +82,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
             // start conversion
             await Task.Run(() => manager.ConvertFileToBinaryText(file, targetPathBin));
-            await Task.Run(() => manager.ConvertFileToDNA(file, targetPathDNA));
+            await Task.Run(() => manager.ConvertFileToDNA(targetPathBin, targetPathDNA));
         }
 
         Console.WriteLine($"Debug All data has been converted (directory: {outputFolderBin})");
