@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.Input;
 using deepMutate.Models.Data;
 using Avalonia.Controls;
 using System;
+using System.Runtime.CompilerServices;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
@@ -54,30 +55,40 @@ public partial class MainWindowViewModel : ViewModelBase
         if (string.IsNullOrEmpty(SelectedFolderPath)) return;
 
         // set folder path + add bin as directory
-        string outputFolder = Path.Combine(SelectedFolderPath, "bin");
+        string outputFolderBin = Path.Combine(SelectedFolderPath, "bin");
+        string outputFolderDNA = Path.Combine(SelectedFolderPath, "dna");
 
         // create folder if it doesn't exist yet
-        if (!Directory.Exists(outputFolder))
+        if (!Directory.Exists(outputFolderBin))
         {
-            Directory.CreateDirectory(outputFolder);
+            Directory.CreateDirectory(outputFolderBin);
+        }
+        if (!Directory.Exists(outputFolderDNA))
+        {
+            Directory.CreateDirectory(outputFolderDNA);
         }
 
         var manager = new FileManager();
-        var files = manager.GetFilesInFolder(SelectedFolderPath);
+        var rawfiles = manager.GetFilesInFolder(SelectedFolderPath);
 
-        foreach (var file in files)
+        foreach (var file in rawfiles)
         {
             // fetch filename without old path
             string fileName = Path.GetFileName(file);
 
-            // create new target path in /bin
-            string targetPath = Path.Combine(outputFolder, fileName + ".bin");
+            // create new target path in /bin & /dna
+            string targetPathBin = Path.Combine(outputFolderBin, fileName + ".bin");
+            string targetPathDNA = Path.Combine(outputFolderDNA, fileName + ".txt");
 
             // start conversion
-            await Task.Run(() => manager.ConvertFileToBinaryText(file, targetPath));
+            await Task.Run(() => manager.ConvertFileToBinaryText(file, targetPathBin));
+            await Task.Run(() => manager.ConvertFileToDNA(file, targetPathDNA));
         }
 
-        Console.WriteLine($"Debug All data has been converted to binary (directory: {outputFolder})");
+        Console.WriteLine($"Debug All data has been converted (directory: {outputFolderBin})");
+
+
+
     }
 
 
