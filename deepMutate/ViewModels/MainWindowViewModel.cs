@@ -37,7 +37,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             SelectedFolderPath = folders[0].Path.LocalPath;
 
-            var manager = new FileManager();
+            var manager = new Mutate();
             var files = manager.GetFilesInFolder(SelectedFolderPath);
 
             FoundFiles.Clear();
@@ -68,21 +68,22 @@ public partial class MainWindowViewModel : ViewModelBase
             Directory.CreateDirectory(outputFolderDNA);
         }
 
-        var manager = new FileManager();
+        var manager = new Mutate();
         var rawfiles = manager.GetFilesInFolder(SelectedFolderPath);
 
         foreach (var file in rawfiles)
         {
             // fetch filename without old path
-            string fileName = Path.GetFileName(file);
+            string fileName = Path.GetFileName(file);  // "photo.jpg"
 
             // create new target path in /bin & /dna
-            string targetPathBin = Path.Combine(outputFolderBin, fileName + ".bin");
-            string targetPathDNA = Path.Combine(outputFolderDNA, fileName + ".txt");
+            string targetPath = Path.Combine(outputFolderBin, fileName + ".bin");  // "/bin/photo.jpg.bin"
+            string fileNameWithBin = Path.GetFileName(targetPath);  // "photo.jpg.bin"
+            string targetPathDNA = Path.Combine(outputFolderDNA, fileNameWithBin.Replace(".bin", ".txt"));  // "/dna/photo.jpg.txt"
 
             // start conversion
-            await Task.Run(() => manager.ConvertFileToBinaryText(file, targetPathBin));
-            await Task.Run(() => manager.ConvertFileToDNA(targetPathBin, targetPathDNA));
+            await Task.Run(() => manager.ConvertFileToBinaryText(file, targetPath));
+            await Task.Run(() => manager.ConvertFileToDNA(targetPath, targetPathDNA));
         }
 
         Console.WriteLine($"Debug All data has been converted \n (directory: {outputFolderBin} \n (directory: {outputFolderDNA})");
