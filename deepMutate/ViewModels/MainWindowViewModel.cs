@@ -53,7 +53,7 @@ public partial class MainWindowViewModel : ViewModelBase
         // has a folder been selected
         if (string.IsNullOrEmpty(SelectedFolderPath)) return;
 
-        // set folder path
+        // set folder path + add bin as directory
         string outputFolder = Path.Combine(SelectedFolderPath, "bin");
 
         // create folder if it doesn't exist yet

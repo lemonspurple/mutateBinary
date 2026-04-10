@@ -30,6 +30,10 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+
+        <Button Content="Mutate data" 
+                Command="{Binding MutateFilesCommand}" 
+                Background="DarkSlateBlue" Foreground="White" />
         
     </StackPanel>
 </Window>
