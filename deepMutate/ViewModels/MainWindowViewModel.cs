@@ -85,10 +85,7 @@ public partial class MainWindowViewModel : ViewModelBase
             await Task.Run(() => manager.ConvertFileToDNA(targetPathBin, targetPathDNA));
         }
 
-        Console.WriteLine($"Debug All data has been converted (directory: {outputFolderBin})");
-
-
-
+        Console.WriteLine($"Debug All data has been converted \n (directory: {outputFolderBin} \n (directory: {outputFolderDNA})");
     }
 
 
