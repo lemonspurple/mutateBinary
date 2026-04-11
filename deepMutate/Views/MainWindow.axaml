@@ -4,7 +4,7 @@
         x:Class="deepMutate.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Title="deepMutate 0.1"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/logo.ico"
         Width="600" Height="450">
 
     <StackPanel Margin="20" Spacing="10">

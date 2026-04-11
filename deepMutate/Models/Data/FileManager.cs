@@ -6,8 +6,15 @@ using System.Text;
 
 namespace deepMutate.Models.Data
 {
-    public class Mutate
+    public class FileManager
     {
+        /*
+        #### #### #### ####
+        General UI Stuff
+        #### #### #### ####
+        */
+
+        // Select Folder Function
         public List<string> GetFilesInFolder(string folderPath)
         {
             try
@@ -25,35 +32,56 @@ namespace deepMutate.Models.Data
             }
         }
 
-        public void ConvertFileToBinaryText(string sourcePath, string targetPath)
+        /*
+        #### #### #### ####
+        DNA Conversion
+        #### #### #### ####
+        */
+
+        public void ConvertFileToDNA(string sourcePath, string targetDirectory)
         {
-            // opening source file
-            using (FileStream fs = File.OpenRead(sourcePath))
-            using (StreamWriter sw = new StreamWriter(targetPath, false, Encoding.UTF8))
+            try
             {
-                int b;
-                // reading byte by byte
-                while ((b = fs.ReadByte()) != -1)
+                // generate output filename: originalname.dna
+                string fileName = Path.GetFileNameWithoutExtension(sourcePath) + ".dna";
+                string targetFilePath = Path.Combine(targetDirectory, fileName);
+
+                using (FileStream fs = File.OpenRead(sourcePath))
+                using (StreamWriter sw = new StreamWriter(targetFilePath, false, Encoding.UTF8))
                 {
-                    /* mini magic trick: b,2 warrants that 5 will be converted into 101 i.E.
-                    however, 255 would be 11111111, which means that if it follows to a 5, no
-                    one clearly knows, if 101 is part of an own value or belongs to the next
-                    .PadLeft therefore puts it into 8 bit lengths */
-                    string binaryString = Convert.ToString(b, 2).PadLeft(8, '0');
-                    sw.Write(binaryString);
+                    int b;
+                    while ((b = fs.ReadByte()) != -1)
+                    {
+                        //  Bit Manipulation
+                        //  Dividing Byte (8 bits) into 4 pairs of 2 bits.
+                        //  1 Byte = 4 DNA signs
+
+                        // THe right shift opperator (>>) is used to support the filestream approach
+                        // It would work otherwise too, but require the entire file to be processed in ram
+                        // instead of cpu. It is nondestructive
+
+                        sw.Write(DNAMapper((b >> 6) & 0b11));
+                        sw.Write(DNAMapper((b >> 4) & 0b11));
+                        sw.Write(DNAMapper((b >> 2) & 0b11));
+                        sw.Write(DNAMapper(b & 0b11));
+                    }
                 }
             }
-        }
-
-
-                public void ConvertFileToDNA(string sourcePath, string targetPath)
-        {
-            // opening source file
-            using (FileStream fs = File.OpenRead(sourcePath))
-            using (StreamWriter sw = new StreamWriter(targetPath, false, Encoding.UTF8))
+            catch (Exception ex)
             {
-
+                Console.WriteLine($"Error encoding {sourcePath}: {ex.Message}");
             }
         }
+
+        // Mapping Bits to DNA   A: 00, T: 11, C: 01, G: 10
+        private static char DNAMapper(int twoBits) => twoBits switch
+        {
+            0b00 => 'A',
+            0b11 => 'T',
+            0b01 => 'C',
+            0b10 => 'G',
+            _ => throw new NotImplementedException("Not a bit")
+        };
+
     }
 }

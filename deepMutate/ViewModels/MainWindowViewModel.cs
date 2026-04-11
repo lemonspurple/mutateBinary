@@ -37,7 +37,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             SelectedFolderPath = folders[0].Path.LocalPath;
 
-            var manager = new Mutate();
+            var manager = new FileManager();
             var files = manager.GetFilesInFolder(SelectedFolderPath);
 
             FoundFiles.Clear();
@@ -55,20 +55,15 @@ public partial class MainWindowViewModel : ViewModelBase
         if (string.IsNullOrEmpty(SelectedFolderPath)) return;
 
         // set folder path + add bin as directory
-        string outputFolderBin = Path.Combine(SelectedFolderPath, "bin");
         string outputFolderDNA = Path.Combine(SelectedFolderPath, "dna");
 
-        // create folder if it doesn't exist yet
-        if (!Directory.Exists(outputFolderBin))
-        {
-            Directory.CreateDirectory(outputFolderBin);
-        }
+
         if (!Directory.Exists(outputFolderDNA))
         {
             Directory.CreateDirectory(outputFolderDNA);
         }
 
-        var manager = new Mutate();
+        var manager = new FileManager();
         var rawfiles = manager.GetFilesInFolder(SelectedFolderPath);
 
         foreach (var file in rawfiles)
@@ -76,17 +71,11 @@ public partial class MainWindowViewModel : ViewModelBase
             // fetch filename without old path
             string fileName = Path.GetFileName(file);  // "photo.jpg"
 
-            // create new target path in /bin & /dna
-            string targetPath = Path.Combine(outputFolderBin, fileName + ".bin");  // "/bin/photo.jpg.bin"
-            string fileNameWithBin = Path.GetFileName(targetPath);  // "photo.jpg.bin"
-            string targetPathDNA = Path.Combine(outputFolderDNA, fileNameWithBin.Replace(".bin", ".txt"));  // "/dna/photo.jpg.txt"
-
             // start conversion
-            await Task.Run(() => manager.ConvertFileToBinaryText(file, targetPath));
-            await Task.Run(() => manager.ConvertFileToDNA(targetPath, targetPathDNA));
+            await Task.Run(() => manager.ConvertFileToDNA(file, outputFolderDNA));
         }
 
-        Console.WriteLine($"Debug All data has been converted \n (directory: {outputFolderBin} \n (directory: {outputFolderDNA})");
+        Console.WriteLine($"Debug: All data has been converted \n (directory: {outputFolderDNA})");
     }
 
 
