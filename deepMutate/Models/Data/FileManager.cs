@@ -10,7 +10,7 @@ namespace deepMutate.Models.Data
     {
         /*
         #### #### #### ####
-        General UI Stuff
+         General UI Stuff
         #### #### #### ####
         */
 
@@ -34,9 +34,12 @@ namespace deepMutate.Models.Data
 
         /*
         #### #### #### ####
-        DNA Conversion
+           DNA Conversion
         #### #### #### ####
         */
+
+
+        // ### Encoding
 
         public void ConvertFileToDNA(string sourcePath, string targetDirectory)
         {
@@ -82,6 +85,10 @@ namespace deepMutate.Models.Data
             0b10 => 'G',
             _ => throw new NotImplementedException("Not a bit")
         };
+
+        // #### Decoding
+
+        //TODO
 
     }
 }
