@@ -1,54 +1,108 @@
 ﻿namespace deepMutate.ViewModels;
+
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.IO;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using deepMutate.Models.Data; 
-
+using deepMutate.Models.Data;
+using Avalonia.Controls;
+using System;
+using System.Runtime.CompilerServices;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
     [ObservableProperty]
     private string? _selectedFolderPath;
 
-    // Eine Liste, die die UI automatisch aktualisiert, wenn Dateien gefunden werden
     public ObservableCollection<string> FoundFiles { get; } = new();
 
     [RelayCommand]
     public async Task PickFolderAsync()
     {
-        // 1. Zugriff auf den StorageProvider von Avalonia
         var topLevel = TopLevel.GetTopLevel((Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.MainWindow);
-        
+
         if (topLevel == null) return;
 
-        // 2. Ordner-Dialog öffnen
         var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
-            Title = "Wähle den DeepMutate Quellordner",
+            Title = "Choose directory",
             AllowMultiple = false
         });
 
         if (folders.Count > 0)
         {
-            // Pfad aus dem Dialog holen
             SelectedFolderPath = folders[0].Path.LocalPath;
 
-            // 3. Dein Model benutzen
             var manager = new FileManager();
             var files = manager.GetFilesInFolder(SelectedFolderPath);
 
-            // 4. Ergebnisse in der UI anzeigen
             FoundFiles.Clear();
             foreach (var file in files)
             {
-                FoundFiles.Add(Path.GetFileName(file)); // Nur Dateiname für die Optik
+                FoundFiles.Add(Path.GetFileName(file));
             }
         }
     }
+
+    [RelayCommand]
+    public async Task MutateFilesAsync()
+    {
+        // has a folder been selected
+        if (string.IsNullOrEmpty(SelectedFolderPath)) return;
+
+        // set folder path + add bin as directory
+        string outputFolderDNA = Path.Combine(SelectedFolderPath, "dna");
+
+
+        if (!Directory.Exists(outputFolderDNA))
+        {
+            Directory.CreateDirectory(outputFolderDNA);
+        }
+
+        var manager = new FileManager();
+        var rawfiles = manager.GetFilesInFolder(SelectedFolderPath);
+
+        foreach (var file in rawfiles)
+        {
+            // fetch filename without old path
+            string fileName = Path.GetFileName(file);  // "photo.jpg"
+
+            // start conversion
+            await Task.Run(() => manager.ConvertFileToDNA(file, outputFolderDNA));
+        }
+
+        Console.WriteLine($"Debug: All data has been encoded to DNA \n (directory: {outputFolderDNA})");
+    }
+
+    [RelayCommand]
+    public async Task DecodeFilesAsync()
+    {
+        if (string.IsNullOrEmpty(SelectedFolderPath)) return;
+
+        string inputFolderDNA = Path.Combine(SelectedFolderPath, "dna");
+        string outputFolderReversed = Path.Combine(SelectedFolderPath, "reversed");
+
+        if (!Directory.Exists(inputFolderDNA)) return;
+
+        if (!Directory.Exists(outputFolderReversed))
+        {
+            Directory.CreateDirectory(outputFolderReversed);
+        }
+
+        var manager = new FileManager();
+        var DNAFiles = manager.GetFilesInFolder(inputFolderDNA);
+
+        foreach (var file in DNAFiles)
+        {
+            await Task.Run(() => manager.ConvertDNAToFile(file, outputFolderReversed));
+        }
+
+        Console.WriteLine($"Debug: All DNA has been decoded to files \n (directory: {outputFolderReversed})");
+    }
+
+
 }

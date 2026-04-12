@@ -4,6 +4,7 @@
         x:Class="deepMutate.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Title="deepMutate 0.1"
+        Icon="/Assets/logo.ico"
         Width="600" Height="450">
 
     <StackPanel Margin="20" Spacing="10">
@@ -21,7 +22,7 @@
 
         <TextBlock Text="Data found:" FontWeight="Bold"/>
         
-        <!-- Liste der Dateien -->
+        <!-- List of data -->
         <ListBox ItemsSource="{Binding FoundFiles}" Height="200">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -29,6 +30,14 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+
+        <Button Content="Mutate data" 
+                Command="{Binding MutateFilesCommand}" 
+                Background="DarkSlateBlue" Foreground="White" />
+
+        <Button Content="Reverse data" 
+                Command="{Binding DecodeFilesCommand}" 
+                Background="DarkSlateBlue" Foreground="White" />
         
     </StackPanel>
 </Window>
