@@ -75,7 +75,33 @@ public partial class MainWindowViewModel : ViewModelBase
             await Task.Run(() => manager.ConvertFileToDNA(file, outputFolderDNA));
         }
 
-        Console.WriteLine($"Debug: All data has been converted \n (directory: {outputFolderDNA})");
+        Console.WriteLine($"Debug: All data has been encoded to DNA \n (directory: {outputFolderDNA})");
+    }
+
+    [RelayCommand]
+    public async Task DecodeFilesAsync()
+    {
+        if (string.IsNullOrEmpty(SelectedFolderPath)) return;
+
+        string inputFolderDNA = Path.Combine(SelectedFolderPath, "dna");
+        string outputFolderReversed = Path.Combine(SelectedFolderPath, "reversed");
+
+        if (!Directory.Exists(inputFolderDNA)) return;
+
+        if (!Directory.Exists(outputFolderReversed))
+        {
+            Directory.CreateDirectory(outputFolderReversed);
+        }
+
+        var manager = new FileManager();
+        var DNAFiles = manager.GetFilesInFolder(inputFolderDNA);
+
+        foreach (var file in DNAFiles)
+        {
+            await Task.Run(() => manager.ConvertDNAToFile(file, outputFolderReversed));
+        }
+
+        Console.WriteLine($"Debug: All DNA has been decoded to files \n (directory: {outputFolderReversed})");
     }
 
 

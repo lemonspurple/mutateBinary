@@ -34,6 +34,10 @@
         <Button Content="Mutate data" 
                 Command="{Binding MutateFilesCommand}" 
                 Background="DarkSlateBlue" Foreground="White" />
+
+        <Button Content="Reverse data" 
+                Command="{Binding DecodeFilesCommand}" 
+                Background="DarkSlateBlue" Foreground="White" />
         
     </StackPanel>
 </Window>

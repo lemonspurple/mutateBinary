@@ -63,10 +63,10 @@ namespace deepMutate.Models.Data
                         // It would work otherwise too, but require the entire file to be processed in ram
                         // instead of cpu. It is nondestructive
 
-                        sw.Write(DNAMapper((b >> 6) & 0b11));
-                        sw.Write(DNAMapper((b >> 4) & 0b11));
-                        sw.Write(DNAMapper((b >> 2) & 0b11));
-                        sw.Write(DNAMapper(b & 0b11));
+                        sw.Write(FileToDNAMapper((b >> 6) & 0b11));
+                        sw.Write(FileToDNAMapper((b >> 4) & 0b11));
+                        sw.Write(FileToDNAMapper((b >> 2) & 0b11));
+                        sw.Write(FileToDNAMapper(b & 0b11));
                     }
                 }
             }
@@ -77,7 +77,7 @@ namespace deepMutate.Models.Data
         }
 
         // Mapping Bits to DNA   A: 00, T: 11, C: 01, G: 10
-        private static char DNAMapper(int twoBits) => twoBits switch
+        private static char FileToDNAMapper(int twoBits) => twoBits switch
         {
             0b00 => 'A',
             0b11 => 'T',
@@ -88,7 +88,50 @@ namespace deepMutate.Models.Data
 
         // #### Decoding
 
-        //TODO
+        public void ConvertDNAToFile(string sourcePath, string targetDirectory)
+        {
+
+            try
+            {
+                string fileName = Path.GetFileNameWithoutExtension(sourcePath);
+                string targetFilePath = Path.Combine(targetDirectory, fileName);
+
+                using (StreamReader sr = new StreamReader(sourcePath, Encoding.UTF8))
+                using (FileStream fsTarget = File.Create(targetFilePath))
+                {
+                    char[] buffer = new char[4];
+                    int charsRead;
+
+                    // Reads 4 chars per piece
+                    while ((charsRead = sr.Read(buffer, 0, 4)) == 4)
+                    {
+
+                        // every base delivers two bits back
+                        int reconstructedByte =
+                            (DNAToFileMapper(buffer[0]) << 6) |
+                            (DNAToFileMapper(buffer[1]) << 4) |
+                            (DNAToFileMapper(buffer[2]) << 2) |
+                            DNAToFileMapper(buffer[3]);
+
+                        fsTarget.WriteByte((byte)reconstructedByte);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error decoding {sourcePath}: {ex.Message}");
+            }
+        }
+
+        // Reverse Mapping DNA to Bits   00: A, 11: T, 01: C, 10: G
+        private static int DNAToFileMapper(char DNA) => DNA switch
+        {
+            'A' => 0b00,
+            'T' => 0b11,
+            'C' => 0b01,
+            'G' => 0b10,
+            _ => throw new NotImplementedException("No valid DNA input. Must be either (A,T,C or G)")
+        };
 
     }
 }
