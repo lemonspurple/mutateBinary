@@ -10,7 +10,7 @@ namespace deepMutate.Models.Data
     {
         /*
         #### #### #### ####
-         General UI Stuff
+         Directory Management
         #### #### #### ####
         */
 
