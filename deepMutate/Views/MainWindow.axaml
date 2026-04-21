@@ -31,13 +31,15 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <Button Content="Mutate data" 
+        <StackPanel Orientation="Horizontal" Spacing="10">
+        <Button Content="Code data to DNA" 
                 Command="{Binding MutateFilesCommand}" 
                 Background="DarkSlateBlue" Foreground="White" />
 
-        <Button Content="Reverse data" 
+        <Button Content="Decode DNA to data" 
                 Command="{Binding DecodeFilesCommand}" 
                 Background="DarkSlateBlue" Foreground="White" />
+        </StackPanel>
         
     </StackPanel>
 </Window>
