@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace deepMutate.Models.Data
+namespace mutateBinary.Models.Data
 {
     public class MutateFuncs
     {

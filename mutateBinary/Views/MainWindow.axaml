@@ -1,15 +1,15 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:deepMutate.ViewModels"
-        x:Class="deepMutate.Views.MainWindow"
+        xmlns:vm="using:mutateBinary.ViewModels"
+        x:Class="mutateBinary.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="deepMutate 0.1"
+        Title="mutateBinary 0.1"
         Icon="/Assets/logo.ico"
         Width="600" Height="450">
 
     <StackPanel Margin="20" Spacing="10">
         
-        <TextBlock Text="deepMutate 0.1" FontSize="18" FontWeight="Bold"/>
+        <TextBlock Text="mutateBinary 0.1" FontSize="18" FontWeight="Bold"/>
 
         <Button Content="Select folder..." 
                 Command="{Binding PickFolderCommand}" 

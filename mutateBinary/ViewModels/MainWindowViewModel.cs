@@ -1,4 +1,4 @@
-﻿namespace deepMutate.ViewModels;
+﻿namespace mutateBinary.ViewModels;
 
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -8,7 +8,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using deepMutate.Models.Data;
+using mutateBinary.Models.Data;
 using Avalonia.Controls;
 using System;
 using System.Runtime.CompilerServices;
