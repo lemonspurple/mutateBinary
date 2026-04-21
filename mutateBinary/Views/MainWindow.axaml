@@ -5,7 +5,8 @@
         x:DataType="vm:MainWindowViewModel"
         Title="mutateBinary 0.1"
         Icon="/Assets/logo.ico"
-        Width="720" Height="850">
+        Width="750" Height="870"
+        MinWidth="750" MinHeight="870"> <!-- yes, width + minwidth is required to work -->
 
     <StackPanel Margin="20" Spacing="10">
         
@@ -45,108 +46,206 @@
 
         <!-- Slider for mutation controll -->
 
-    
- <WrapPanel Orientation="Horizontal">
+<Grid RowDefinitions="Auto,Auto,Auto,Auto"
+      ColumnDefinitions="*,*"
+      RowSpacing="10"
+      ColumnSpacing="20"
+      Margin="0,20,0,10">
 
-    <!-- Block 1 -->
-     <TextBlock Text="Mutation probabilities:" Margin="0,0,0,5" />
-    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,20,10">
-        <StackPanel>
-            <TextBlock Text="Point mutations" Margin="0,0,0,5" />
-            <Slider x:Name="MySlider" Minimum="0.00" Maximum="100.00" Value="0.00"
-                    SmallChange="0.01" LargeChange="1" Width="180" />
+    <!-- Block 1: Point -->
+    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="10">
+        <StackPanel Width="220">
+            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
+                <TextBlock Text="Point" VerticalAlignment="Center" />
+                <Border Width="16" Height="16" CornerRadius="8"
+                        BorderBrush="Gray" BorderThickness="1"
+                        Background="Transparent" Cursor="Help"
+                        ToolTip.Tip="Probability of point mutations. A single base is replaced by another. &#10;(GCA → GCC)">
+                    <TextBlock Text="?" FontSize="11" FontWeight="Bold"
+                               Foreground="Gray"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                </Border>
+            </StackPanel>
+            <Slider x:Name="MySlider1" Minimum="0.00" Maximum="100.00" Value="0.00"
+                    SmallChange="0.01" LargeChange="1" />
         </StackPanel>
-        <NumericUpDown Value="{Binding #MySlider.Value}"
+        <NumericUpDown Value="{Binding #MySlider1.Value}"
                        Minimum="0.00" Maximum="100.00" Increment="0.01"
-                       FormatString="F2" Width="130" VerticalAlignment="Bottom" />
+                       FormatString="F2" Width="120" VerticalAlignment="Bottom" />
     </StackPanel>
 
-    <!-- Block 2 -->
-    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,20,10">
-        <StackPanel>
-            <TextBlock Text="Number of items:" Margin="0,0,0,5" />
+    <!-- Block 2: Frameshift -->
+    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="10">
+        <StackPanel Width="220">
+            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
+                <TextBlock Text="Frameshift" VerticalAlignment="Center" />
+                <Border Width="16" Height="16" CornerRadius="8"
+                        BorderBrush="Gray" BorderThickness="1"
+                        Background="Transparent" Cursor="Help"
+                        ToolTip.Tip="Probability of frameshift. &#10;(ATG-CGT-ACG → ATC-GTA-CG)">
+                    <TextBlock Text="?" FontSize="11" FontWeight="Bold"
+                               Foreground="Gray"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                </Border>
+            </StackPanel>
             <Slider x:Name="MySlider2" Minimum="0.00" Maximum="100.00" Value="0.00"
-                    SmallChange="0.01" LargeChange="1" Width="180" />
+                    SmallChange="0.01" LargeChange="1" />
         </StackPanel>
         <NumericUpDown Value="{Binding #MySlider2.Value}"
                        Minimum="0.00" Maximum="100.00" Increment="0.01"
-                       FormatString="F2" Width="130" VerticalAlignment="Bottom" />
+                       FormatString="F2" Width="120" VerticalAlignment="Bottom" />
     </StackPanel>
 
-    <!-- Block 3 -->
-    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,20,10">
-        <StackPanel>
-            <TextBlock Text="Number of items:" Margin="0,0,0,5" />
+    <!-- Block 3: Frame insert / delete -->
+    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="10">
+        <StackPanel Width="220">
+            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
+                <TextBlock Text="Frame Insert / Delete" VerticalAlignment="Center" TextWrapping="NoWrap" />
+                <Border Width="16" Height="16" CornerRadius="8"
+                        BorderBrush="Gray" BorderThickness="1"
+                        Background="Transparent" Cursor="Help"
+                        ToolTip.Tip="Probability of an indel being deleted or inserted. (ATG-CGT-ACG → ATG-GGC-CGT-ACG)">
+                    <TextBlock Text="?" FontSize="11" FontWeight="Bold"
+                               Foreground="Gray"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                </Border>
+            </StackPanel>
             <Slider x:Name="MySlider3" Minimum="0.00" Maximum="100.00" Value="0.00"
-                    SmallChange="0.01" LargeChange="1" Width="180" />
+                    SmallChange="0.01" LargeChange="1" />
         </StackPanel>
         <NumericUpDown Value="{Binding #MySlider3.Value}"
                        Minimum="0.00" Maximum="100.00" Increment="0.01"
-                       FormatString="F2" Width="130" VerticalAlignment="Bottom" />
+                       FormatString="F2" Width="120" VerticalAlignment="Bottom" />
     </StackPanel>
 
-    <!-- Block 4 -->
-    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,20,10">
-        <StackPanel>
-            <TextBlock Text="Number of items:" Margin="0,0,0,5" />
+    <!-- Block 4: Duplications -->
+    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="10">
+        <StackPanel Width="220">
+            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
+                <TextBlock Text="Duplications" VerticalAlignment="Center" TextWrapping="NoWrap" />
+                <Border Width="16" Height="16" CornerRadius="8"
+                        BorderBrush="Gray" BorderThickness="1"
+                        Background="Transparent" Cursor="Help"
+                        ToolTip.Tip="Probability of a chromosome segment being duplicated. &#10;(ABCDEF → ABCDEFDEF)">
+                    <TextBlock Text="?" FontSize="11" FontWeight="Bold"
+                               Foreground="Gray"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                </Border>
+            </StackPanel>
             <Slider x:Name="MySlider4" Minimum="0.00" Maximum="100.00" Value="0.00"
-                    SmallChange="0.01" LargeChange="1" Width="180" />
+                    SmallChange="0.01" LargeChange="1" />
         </StackPanel>
         <NumericUpDown Value="{Binding #MySlider4.Value}"
                        Minimum="0.00" Maximum="100.00" Increment="0.01"
-                       FormatString="F2" Width="130" VerticalAlignment="Bottom" />
+                       FormatString="F2" Width="120" VerticalAlignment="Bottom" />
     </StackPanel>
 
-    <!-- Block 5 -->
-    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,20,10">
-        <StackPanel>
-            <TextBlock Text="Number of items:" Margin="0,0,0,5" />
+    <!-- Block 5: Deletion -->
+    <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="10">
+        <StackPanel Width="220">
+            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
+                <TextBlock Text="Deletion" VerticalAlignment="Center" TextWrapping="NoWrap" />
+                <Border Width="16" Height="16" CornerRadius="8"
+                        BorderBrush="Gray" BorderThickness="1"
+                        Background="Transparent" Cursor="Help"
+                        ToolTip.Tip="Probability of a chromosome segment being deleted. &#10;(ABCDEF → ABEF)">
+                    <TextBlock Text="?" FontSize="11" FontWeight="Bold"
+                               Foreground="Gray"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                </Border>
+            </StackPanel>
             <Slider x:Name="MySlider5" Minimum="0.00" Maximum="100.00" Value="0.00"
-                    SmallChange="0.01" LargeChange="1" Width="180" />
+                    SmallChange="0.01" LargeChange="1" />
         </StackPanel>
         <NumericUpDown Value="{Binding #MySlider5.Value}"
                        Minimum="0.00" Maximum="100.00" Increment="0.01"
-                       FormatString="F2" Width="130" VerticalAlignment="Bottom" />
+                       FormatString="F2" Width="120" VerticalAlignment="Bottom" />
     </StackPanel>
 
-    <!-- Block 6 -->
-    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,20,10">
-        <StackPanel>
-            <TextBlock Text="Number of items:" Margin="0,0,0,5" />
+    <!-- Block 6: Inversion -->
+    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="10">
+        <StackPanel Width="220">
+            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
+                <TextBlock Text="Inversion" VerticalAlignment="Center" TextWrapping="NoWrap" />
+                <Border Width="16" Height="16" CornerRadius="8"
+                        BorderBrush="Gray" BorderThickness="1"
+                        Background="Transparent" Cursor="Help"
+                        ToolTip.Tip="Probability of a chromosome segment being inverted. &#10;(ABCDEF → ABEDCF)">
+                    <TextBlock Text="?" FontSize="11" FontWeight="Bold"
+                               Foreground="Gray"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                </Border>
+            </StackPanel>
             <Slider x:Name="MySlider6" Minimum="0.00" Maximum="100.00" Value="0.00"
-                    SmallChange="0.01" LargeChange="1" Width="180" />
+                    SmallChange="0.01" LargeChange="1" />
         </StackPanel>
         <NumericUpDown Value="{Binding #MySlider6.Value}"
                        Minimum="0.00" Maximum="100.00" Increment="0.01"
-                       FormatString="F2" Width="130" VerticalAlignment="Bottom" />
+                       FormatString="F2" Width="120" VerticalAlignment="Bottom" />
     </StackPanel>
 
-    <!-- Block 7 -->
-    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,20,10">
-        <StackPanel>
-            <TextBlock Text="Number of items:" Margin="0,0,0,5" />
+    <!-- Block 7: Translocation -->
+    <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Spacing="10">
+        <StackPanel Width="220">
+            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
+                <TextBlock Text="Translocation" VerticalAlignment="Center" TextWrapping="NoWrap" />
+                <Border Width="16" Height="16" CornerRadius="8"
+                        BorderBrush="Gray" BorderThickness="1"
+                        Background="Transparent" Cursor="Help"
+                        ToolTip.Tip="Probability of translocating chromosomes to a different position within the sequence. &#10;(ABCDEF → ABDFEC)">
+                    <TextBlock Text="?" FontSize="11" FontWeight="Bold"
+                               Foreground="Gray"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                </Border>
+            </StackPanel>
             <Slider x:Name="MySlider7" Minimum="0.00" Maximum="100.00" Value="0.00"
-                    SmallChange="0.01" LargeChange="1" Width="180" />
+                    SmallChange="0.01" LargeChange="1" />
         </StackPanel>
         <NumericUpDown Value="{Binding #MySlider7.Value}"
                        Minimum="0.00" Maximum="100.00" Increment="0.01"
-                       FormatString="F2" Width="130" VerticalAlignment="Bottom" />
+                       FormatString="F2" Width="120" VerticalAlignment="Bottom" />
     </StackPanel>
 
-    <!-- Block 8 -->
-    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,20,10">
-        <StackPanel>
-            <TextBlock Text="Number of items:" Margin="0,0,0,5" />
-            <Slider x:Name="MySlider8" Minimum="0.00" Maximum="100.00" Value="0.00"
-                    SmallChange="0.01" LargeChange="1" Width="180" />
+    <!-- Block 8: Cycles  -->
+    <StackPanel Grid.Row="3" Grid.Column="1"
+                VerticalAlignment="Bottom">
+        <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
+            <TextBlock Text="Cycles" VerticalAlignment="Center" />
+            <Border Width="16" Height="16" CornerRadius="8"
+                    BorderBrush="Gray" BorderThickness="1"
+                    Background="Transparent" Cursor="Help"
+                    ToolTip.Tip="How often do you want to mutate the DNA file with given parameters?">
+                <TextBlock Text="?" FontSize="11" FontWeight="Bold"
+                           Foreground="Gray"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
+            </Border>
         </StackPanel>
-        <NumericUpDown Value="{Binding #MySlider8.Value}"
-                       Minimum="0.00" Maximum="100.00" Increment="0.01"
-                       FormatString="F2" Width="130" VerticalAlignment="Bottom" />
+        <NumericUpDown x:Name="MySlider8" Value="1"
+                       Minimum="1" Increment="1"
+                       FormatString="F0" Width="150"
+                       HorizontalAlignment="Left" />
     </StackPanel>
 
-</WrapPanel>
+</Grid>
 
+
+
+
+<!-- Mutate button-->
+
+        <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right" >
+        <Button Content="Mutate data" 
+                Command="{Binding MutateFilesCommand}" 
+                Background="Yellow" Foreground="Black" Margin="0,10,20,0" />
+        </StackPanel>
 
 
 
