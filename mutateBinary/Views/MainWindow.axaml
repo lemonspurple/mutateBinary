@@ -5,7 +5,7 @@
         x:DataType="vm:MainWindowViewModel"
         Title="mutateBinary 0.1"
         Icon="/Assets/logo.ico"
-        Width="600" Height="450">
+        Width="720" Height="850">
 
     <StackPanel Margin="20" Spacing="10">
         
@@ -31,6 +31,8 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
+        <!-- Action buttons -->
+        
         <StackPanel Orientation="Horizontal" Spacing="10">
         <Button Content="Code data to DNA" 
                 Command="{Binding MutateFilesCommand}" 
@@ -40,6 +42,114 @@
                 Command="{Binding DecodeFilesCommand}" 
                 Background="DarkSlateBlue" Foreground="White" />
         </StackPanel>
-        
+
+        <!-- Slider for mutation controll -->
+
+    
+ <WrapPanel Orientation="Horizontal">
+
+    <!-- Block 1 -->
+     <TextBlock Text="Mutation probabilities:" Margin="0,0,0,5" />
+    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,20,10">
+        <StackPanel>
+            <TextBlock Text="Point mutations" Margin="0,0,0,5" />
+            <Slider x:Name="MySlider" Minimum="0.00" Maximum="100.00" Value="0.00"
+                    SmallChange="0.01" LargeChange="1" Width="180" />
+        </StackPanel>
+        <NumericUpDown Value="{Binding #MySlider.Value}"
+                       Minimum="0.00" Maximum="100.00" Increment="0.01"
+                       FormatString="F2" Width="130" VerticalAlignment="Bottom" />
     </StackPanel>
+
+    <!-- Block 2 -->
+    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,20,10">
+        <StackPanel>
+            <TextBlock Text="Number of items:" Margin="0,0,0,5" />
+            <Slider x:Name="MySlider2" Minimum="0.00" Maximum="100.00" Value="0.00"
+                    SmallChange="0.01" LargeChange="1" Width="180" />
+        </StackPanel>
+        <NumericUpDown Value="{Binding #MySlider2.Value}"
+                       Minimum="0.00" Maximum="100.00" Increment="0.01"
+                       FormatString="F2" Width="130" VerticalAlignment="Bottom" />
+    </StackPanel>
+
+    <!-- Block 3 -->
+    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,20,10">
+        <StackPanel>
+            <TextBlock Text="Number of items:" Margin="0,0,0,5" />
+            <Slider x:Name="MySlider3" Minimum="0.00" Maximum="100.00" Value="0.00"
+                    SmallChange="0.01" LargeChange="1" Width="180" />
+        </StackPanel>
+        <NumericUpDown Value="{Binding #MySlider3.Value}"
+                       Minimum="0.00" Maximum="100.00" Increment="0.01"
+                       FormatString="F2" Width="130" VerticalAlignment="Bottom" />
+    </StackPanel>
+
+    <!-- Block 4 -->
+    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,20,10">
+        <StackPanel>
+            <TextBlock Text="Number of items:" Margin="0,0,0,5" />
+            <Slider x:Name="MySlider4" Minimum="0.00" Maximum="100.00" Value="0.00"
+                    SmallChange="0.01" LargeChange="1" Width="180" />
+        </StackPanel>
+        <NumericUpDown Value="{Binding #MySlider4.Value}"
+                       Minimum="0.00" Maximum="100.00" Increment="0.01"
+                       FormatString="F2" Width="130" VerticalAlignment="Bottom" />
+    </StackPanel>
+
+    <!-- Block 5 -->
+    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,20,10">
+        <StackPanel>
+            <TextBlock Text="Number of items:" Margin="0,0,0,5" />
+            <Slider x:Name="MySlider5" Minimum="0.00" Maximum="100.00" Value="0.00"
+                    SmallChange="0.01" LargeChange="1" Width="180" />
+        </StackPanel>
+        <NumericUpDown Value="{Binding #MySlider5.Value}"
+                       Minimum="0.00" Maximum="100.00" Increment="0.01"
+                       FormatString="F2" Width="130" VerticalAlignment="Bottom" />
+    </StackPanel>
+
+    <!-- Block 6 -->
+    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,20,10">
+        <StackPanel>
+            <TextBlock Text="Number of items:" Margin="0,0,0,5" />
+            <Slider x:Name="MySlider6" Minimum="0.00" Maximum="100.00" Value="0.00"
+                    SmallChange="0.01" LargeChange="1" Width="180" />
+        </StackPanel>
+        <NumericUpDown Value="{Binding #MySlider6.Value}"
+                       Minimum="0.00" Maximum="100.00" Increment="0.01"
+                       FormatString="F2" Width="130" VerticalAlignment="Bottom" />
+    </StackPanel>
+
+    <!-- Block 7 -->
+    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,20,10">
+        <StackPanel>
+            <TextBlock Text="Number of items:" Margin="0,0,0,5" />
+            <Slider x:Name="MySlider7" Minimum="0.00" Maximum="100.00" Value="0.00"
+                    SmallChange="0.01" LargeChange="1" Width="180" />
+        </StackPanel>
+        <NumericUpDown Value="{Binding #MySlider7.Value}"
+                       Minimum="0.00" Maximum="100.00" Increment="0.01"
+                       FormatString="F2" Width="130" VerticalAlignment="Bottom" />
+    </StackPanel>
+
+    <!-- Block 8 -->
+    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,20,10">
+        <StackPanel>
+            <TextBlock Text="Number of items:" Margin="0,0,0,5" />
+            <Slider x:Name="MySlider8" Minimum="0.00" Maximum="100.00" Value="0.00"
+                    SmallChange="0.01" LargeChange="1" Width="180" />
+        </StackPanel>
+        <NumericUpDown Value="{Binding #MySlider8.Value}"
+                       Minimum="0.00" Maximum="100.00" Increment="0.01"
+                       FormatString="F2" Width="130" VerticalAlignment="Bottom" />
+    </StackPanel>
+
+</WrapPanel>
+
+
+
+
+
+</StackPanel>
 </Window>
