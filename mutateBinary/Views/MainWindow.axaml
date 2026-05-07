@@ -6,7 +6,7 @@
     Title="mutateBinary 0.1"
     Icon="/Assets/logo.ico"
     Width="750" Height="870"
-    MinWidth="750" MinHeight="870"> <!-- yes, width + minwidth is required to work -->
+    MinWidth="750" MinHeight="870"> <!-- Width sets startup values -->
 
     <StackPanel Margin="20" Spacing="10">
 

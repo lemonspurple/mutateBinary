@@ -11,7 +11,6 @@ using CommunityToolkit.Mvvm.Input;
 using mutateBinary.Models.Data;
 using Avalonia.Controls;
 using System;
-using System.Runtime.CompilerServices;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
@@ -19,6 +18,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private string? _selectedFolderPath;
     public ObservableCollection<string> FoundFiles { get; } = new();
+    
     // Mutate values
     // generator will turn _menuPointValue into MenuPointValue.
     [ObservableProperty]
