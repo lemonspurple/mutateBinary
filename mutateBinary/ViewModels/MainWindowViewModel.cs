@@ -20,22 +20,23 @@ public partial class MainWindowViewModel : ViewModelBase
     private string? _selectedFolderPath;
     public ObservableCollection<string> FoundFiles { get; } = new();
     // Mutate values
+    // generator will turn _menuPointValue into MenuPointValue.
     [ObservableProperty]
-    private float menuPointValue = default;
+    private float _menuPointValue = default;
     [ObservableProperty]
-    private float menuFrameshiftValue = default;
+    private float _menuFrameshiftValue = default;
     [ObservableProperty]
-    private float menuFrameInsertDeleteValue = default;
+    private float _menuFrameInsertDeleteValue = default;
     [ObservableProperty]
-    private float menuDuplicationsValue = default;
+    private float _menuDuplicationsValue = default;
     [ObservableProperty]
-    private float menuDeletionValue = default;
+    private float _menuDeletionValue = default;
     [ObservableProperty]
-    private float menuInversionValue = default;
+    private float _menuInversionValue = default;
     [ObservableProperty]
-    private float menuTranslocationValue = default;
+    private float _menuTranslocationValue = default;
     [ObservableProperty]
-    private double menuCyclesValue = default;
+    private double _menuCyclesValue = 1;
 
     
 
