@@ -15,10 +15,29 @@ using System.Runtime.CompilerServices;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
+    // Getting / Listing files in folder
     [ObservableProperty]
     private string? _selectedFolderPath;
-
     public ObservableCollection<string> FoundFiles { get; } = new();
+    // Mutate values
+    [ObservableProperty]
+    private float menuPointValue = default;
+    [ObservableProperty]
+    private float menuFrameshiftValue = default;
+    [ObservableProperty]
+    private float menuFrameInsertDeleteValue = default;
+    [ObservableProperty]
+    private float menuDuplicationsValue = default;
+    [ObservableProperty]
+    private float menuDeletionValue = default;
+    [ObservableProperty]
+    private float menuInversionValue = default;
+    [ObservableProperty]
+    private float menuTranslocationValue = default;
+    [ObservableProperty]
+    private double menuCyclesValue = default;
+
+    
 
     [RelayCommand]
     public async Task PickFolderAsync()
@@ -107,8 +126,9 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     public async Task PrintDebugLogAsync()
     {
-
-        Console.WriteLine($"Printing debug log");
+        //MutateFuncs mutateFuncs = new MutateFuncs();
+        //mutateFuncs.printMutateValuesToDebug();
+        Console.WriteLine($"Debug+{MenuPointValue}+{MenuFrameshiftValue}+{MenuFrameInsertDeleteValue}+{MenuDuplicationsValue}+{MenuDeletionValue}+{MenuInversionValue}+{MenuTranslocationValue}+{MenuCyclesValue}");
     }
 
 

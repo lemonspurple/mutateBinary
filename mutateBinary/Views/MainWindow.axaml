@@ -67,10 +67,10 @@
                                 VerticalAlignment="Center" />
                         </Border>
                     </StackPanel>
-                    <Slider x:Name="MySlider1" Minimum="0.00" Maximum="100.00" Value="0.00"
+                    <Slider Value="{Binding MenuPointValue, Mode=TwoWay}" Minimum="0.00" Maximum="100.00"
                         SmallChange="0.01" LargeChange="1" />
                 </StackPanel>
-                <NumericUpDown Value="{Binding #MySlider1.Value}"
+                <NumericUpDown Value="{Binding MenuPointValue, Mode=TwoWay}"
                     Minimum="0.00" Maximum="100.00" Increment="0.01"
                     FormatString="F2" Width="120" VerticalAlignment="Bottom" />
             </StackPanel>
@@ -90,10 +90,10 @@
                                 VerticalAlignment="Center" />
                         </Border>
                     </StackPanel>
-                    <Slider x:Name="MySlider2" Minimum="0.00" Maximum="100.00" Value="0.00"
+                    <Slider Value="{Binding MenuFrameshiftValue, Mode=TwoWay}" Minimum="0.00" Maximum="100.00"
                         SmallChange="0.01" LargeChange="1" />
                 </StackPanel>
-                <NumericUpDown Value="{Binding #MySlider2.Value}"
+                <NumericUpDown Value="{Binding MenuFrameshiftValue, Mode=TwoWay}"
                     Minimum="0.00" Maximum="100.00" Increment="0.01"
                     FormatString="F2" Width="120" VerticalAlignment="Bottom" />
             </StackPanel>
@@ -114,10 +114,10 @@
                                 VerticalAlignment="Center" />
                         </Border>
                     </StackPanel>
-                    <Slider x:Name="MySlider3" Minimum="0.00" Maximum="100.00" Value="0.00"
+                    <Slider Value="{Binding MenuFrameInsertDeleteValue, Mode=TwoWay}" Minimum="0.00" Maximum="100.00"
                         SmallChange="0.01" LargeChange="1" />
                 </StackPanel>
-                <NumericUpDown Value="{Binding #MySlider3.Value}"
+                <NumericUpDown Value="{Binding MenuFrameInsertDeleteValue, Mode=TwoWay}"
                     Minimum="0.00" Maximum="100.00" Increment="0.01"
                     FormatString="F2" Width="120" VerticalAlignment="Bottom" />
             </StackPanel>
@@ -138,10 +138,10 @@
                                 VerticalAlignment="Center" />
                         </Border>
                     </StackPanel>
-                    <Slider x:Name="MySlider4" Minimum="0.00" Maximum="100.00" Value="0.00"
+                    <Slider Value="{Binding MenuDuplicationsValue, Mode=TwoWay}" Minimum="0.00" Maximum="100.00"
                         SmallChange="0.01" LargeChange="1" />
                 </StackPanel>
-                <NumericUpDown Value="{Binding #MySlider4.Value}"
+                <NumericUpDown Value="{Binding MenuDuplicationsValue, Mode=TwoWay}"
                     Minimum="0.00" Maximum="100.00" Increment="0.01"
                     FormatString="F2" Width="120" VerticalAlignment="Bottom" />
             </StackPanel>
@@ -161,10 +161,10 @@
                                 VerticalAlignment="Center" />
                         </Border>
                     </StackPanel>
-                    <Slider x:Name="MySlider5" Minimum="0.00" Maximum="100.00" Value="0.00"
+                    <Slider Value="{Binding MenuDeletionValue, Mode=TwoWay}" Minimum="0.00" Maximum="100.00"
                         SmallChange="0.01" LargeChange="1" />
                 </StackPanel>
-                <NumericUpDown Value="{Binding #MySlider5.Value}"
+                <NumericUpDown Value="{Binding MenuDeletionValue, Mode=TwoWay}"
                     Minimum="0.00" Maximum="100.00" Increment="0.01"
                     FormatString="F2" Width="120" VerticalAlignment="Bottom" />
             </StackPanel>
@@ -184,10 +184,10 @@
                                 VerticalAlignment="Center" />
                         </Border>
                     </StackPanel>
-                    <Slider x:Name="MySlider6" Minimum="0.00" Maximum="100.00" Value="0.00"
+                    <Slider Value="{Binding MenuInversionValue, Mode=TwoWay}" Minimum="0.00" Maximum="100.00"
                         SmallChange="0.01" LargeChange="1" />
                 </StackPanel>
-                <NumericUpDown Value="{Binding #MySlider6.Value}"
+                <NumericUpDown Value="{Binding MenuInversionValue, Mode=TwoWay}"
                     Minimum="0.00" Maximum="100.00" Increment="0.01"
                     FormatString="F2" Width="120" VerticalAlignment="Bottom" />
             </StackPanel>
@@ -208,10 +208,10 @@
                                 VerticalAlignment="Center" />
                         </Border>
                     </StackPanel>
-                    <Slider x:Name="MySlider7" Minimum="0.00" Maximum="100.00" Value="0.00"
+                    <Slider Value="{Binding MenuTranslocationValue, Mode=TwoWay}" Minimum="0.00" Maximum="100.00"
                         SmallChange="0.01" LargeChange="1" />
                 </StackPanel>
-                <NumericUpDown Value="{Binding #MySlider7.Value}"
+                <NumericUpDown Value="{Binding MenuTranslocationValue, Mode=TwoWay}"
                     Minimum="0.00" Maximum="100.00" Increment="0.01"
                     FormatString="F2" Width="120" VerticalAlignment="Bottom" />
             </StackPanel>
@@ -231,7 +231,7 @@
                             VerticalAlignment="Center" />
                     </Border>
                 </StackPanel>
-                <NumericUpDown x:Name="MySlider8" Value="1"
+                <NumericUpDown Value="{Binding MenuCyclesValue, Mode=TwoWay}"
                     Minimum="1" Increment="1"
                     FormatString="F0" Width="150"
                     HorizontalAlignment="Left" />
