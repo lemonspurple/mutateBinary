@@ -104,5 +104,12 @@ public partial class MainWindowViewModel : ViewModelBase
         Console.WriteLine($"Debug: All DNA has been decoded to files \n (directory: {outputFolderReversed})");
     }
 
+    [RelayCommand]
+    public async Task PrintDebugLogAsync()
+    {
+
+        Console.WriteLine($"Printing debug log");
+    }
+
 
 }
