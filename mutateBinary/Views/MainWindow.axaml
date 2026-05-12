@@ -36,7 +36,7 @@
 
         <StackPanel Orientation="Horizontal" Spacing="10">
             <Button Content="Code data to DNA"
-                Command="{Binding MutateFilesCommand}"
+                Command="{Binding EncodeFilesToDNACommand}"
                 Background="DarkSlateBlue" Foreground="White" />
 
             <Button Content="Decode DNA to data"
@@ -247,7 +247,7 @@
                 Command="{Binding PrintDebugLogCommand}"
                 Background="Yellow" Foreground="Black" Margin="0,10,20,0" />
             <Button Content="Mutate data"
-                Command="{Binding MutateFilesCommand}"
+                Command="{Binding EncodeFilesToDNACommand}"
                 Background="Yellow" Foreground="Black" Margin="0,10,20,0" />
         </StackPanel>
 

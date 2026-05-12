@@ -69,7 +69,7 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    public async Task MutateFilesAsync()
+    public async Task EncodeFilesToDNAAsync()
     {
         // has a folder been selected
         if (string.IsNullOrEmpty(SelectedFolderPath)) return;
