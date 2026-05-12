@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Text;
 
+//TODO ADD REPETITIONS
+
 /* 
                 A 1. Point mutations: 
                                         GCA to 
