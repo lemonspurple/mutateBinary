@@ -247,7 +247,7 @@
                 Command="{Binding PrintDebugLogCommand}"
                 Background="Yellow" Foreground="Black" Margin="0,10,20,0" />
             <Button Content="Mutate data"
-                Command="{Binding EncodeFilesToDNACommand}"
+                Command="{Binding MutateDataCommand}"
                 Background="Yellow" Foreground="Black" Margin="0,10,20,0" />
         </StackPanel>
 

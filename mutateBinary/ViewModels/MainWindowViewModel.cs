@@ -1,5 +1,6 @@
 ﻿namespace mutateBinary.ViewModels;
 
+using mutateBinary.Models.Functions;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.IO;
@@ -18,7 +19,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private string? _selectedFolderPath;
     public ObservableCollection<string> FoundFiles { get; } = new();
-    
+
     // Mutate values
     // generator will turn _menuPointValue into MenuPointValue.
     [ObservableProperty]
@@ -38,7 +39,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private int _menuCyclesValue = 1;
 
-    
+
 
     [RelayCommand]
     public async Task PickFolderAsync()
@@ -132,5 +133,45 @@ public partial class MainWindowViewModel : ViewModelBase
         Console.WriteLine($"Debug+{MenuPointValue}+{MenuFrameshiftValue}+{MenuFrameInsertDeleteValue}+{MenuDuplicationsValue}+{MenuDeletionValue}+{MenuInversionValue}+{MenuTranslocationValue}+{MenuCyclesValue}");
     }
 
+    [RelayCommand]
+    public async Task MutateDataAsync()
+    {
+        if (string.IsNullOrEmpty(SelectedFolderPath)) return;
 
+        string outputFolder = Path.Combine(SelectedFolderPath, "mutated");
+        if (!Directory.Exists(outputFolder))
+            Directory.CreateDirectory(outputFolder);
+
+        var mutator = new MutateFuncs(
+            MenuPointValue, MenuFrameshiftValue, MenuFrameInsertDeleteValue,
+            MenuDuplicationsValue, MenuDeletionValue, MenuInversionValue,
+            MenuTranslocationValue, (int)MenuCyclesValue
+        );
+
+        var manager = new FileManager();
+        var files = manager.GetFilesInFolder(SelectedFolderPath);
+
+        foreach (var file in files)
+        {
+            string fileName = Path.GetFileName(file);
+            string dnaPath = Path.Combine(SelectedFolderPath, "dna",
+                Path.GetFileNameWithoutExtension(file) + ".dna");
+            string outputPath = Path.Combine(outputFolder, fileName);
+
+            if (!File.Exists(dnaPath)) continue;
+
+            // Copy .dna to temp working file, then mutate to output
+            string workingDna = dnaPath + ".work";
+            File.Copy(dnaPath, workingDna, overwrite: true);
+
+            await Task.Run(() => mutator.MutateDNAFile(workingDna, workingDna + ".mutated"));
+
+            string mutatedDna = workingDna + ".mutated";
+            await Task.Run(() => manager.ConvertDNAToFile(mutatedDna, outputFolder));
+
+            File.Delete(mutatedDna);
+        }
+
+        Console.WriteLine($"Debug: Mutation complete (directory: {outputFolder})");
+    }
 }
