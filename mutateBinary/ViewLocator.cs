@@ -2,9 +2,9 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using deepMutate.ViewModels;
+using mutateBinary.ViewModels;
 
-namespace deepMutate;
+namespace mutateBinary;
 
 /// <summary>
 /// Given a view model, returns the corresponding view if possible.

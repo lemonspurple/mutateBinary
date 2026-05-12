@@ -4,10 +4,10 @@ using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
 using Avalonia.Markup.Xaml;
-using deepMutate.ViewModels;
-using deepMutate.Views;
+using mutateBinary.ViewModels;
+using mutateBinary.Views;
 
-namespace deepMutate;
+namespace mutateBinary;
 
 public partial class App : Application
 {

@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace deepMutate.Views;
+namespace mutateBinary.Views;
 
 public partial class MainWindow : Window
 {

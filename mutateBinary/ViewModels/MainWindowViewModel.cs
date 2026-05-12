@@ -1,5 +1,6 @@
-﻿namespace deepMutate.ViewModels;
+﻿namespace mutateBinary.ViewModels;
 
+using mutateBinary.Models.Functions;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.IO;
@@ -8,17 +9,37 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using deepMutate.Models.Data;
+using mutateBinary.Models.Data;
 using Avalonia.Controls;
 using System;
-using System.Runtime.CompilerServices;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
+    // Getting / Listing files in folder
     [ObservableProperty]
     private string? _selectedFolderPath;
-
     public ObservableCollection<string> FoundFiles { get; } = new();
+
+    // Mutate values
+    // generator will turn _menuPointValue into MenuPointValue.
+    [ObservableProperty]
+    private float _menuPointValue = default;
+    [ObservableProperty]
+    private float _menuFrameshiftValue = default;
+    [ObservableProperty]
+    private float _menuFrameInsertDeleteValue = default;
+    [ObservableProperty]
+    private float _menuDuplicationsValue = default;
+    [ObservableProperty]
+    private float _menuDeletionValue = default;
+    [ObservableProperty]
+    private float _menuInversionValue = default;
+    [ObservableProperty]
+    private float _menuTranslocationValue = default;
+    [ObservableProperty]
+    private int _menuCyclesValue = 1;
+
+
 
     [RelayCommand]
     public async Task PickFolderAsync()
@@ -49,7 +70,7 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    public async Task MutateFilesAsync()
+    public async Task EncodeFilesToDNAAsync()
     {
         // has a folder been selected
         if (string.IsNullOrEmpty(SelectedFolderPath)) return;
@@ -104,5 +125,53 @@ public partial class MainWindowViewModel : ViewModelBase
         Console.WriteLine($"Debug: All DNA has been decoded to files \n (directory: {outputFolderReversed})");
     }
 
+    [RelayCommand]
+    public async Task PrintDebugLogAsync()
+    {
+        //MutateFuncs mutateFuncs = new MutateFuncs();
+        //mutateFuncs.printMutateValuesToDebug();
+        Console.WriteLine($"Debug+{MenuPointValue}+{MenuFrameshiftValue}+{MenuFrameInsertDeleteValue}+{MenuDuplicationsValue}+{MenuDeletionValue}+{MenuInversionValue}+{MenuTranslocationValue}+{MenuCyclesValue}");
+    }
 
+    [RelayCommand]
+    public async Task MutateDataAsync()
+    {
+        if (string.IsNullOrEmpty(SelectedFolderPath)) return;
+
+        string outputFolder = Path.Combine(SelectedFolderPath, "mutated");
+        if (!Directory.Exists(outputFolder))
+            Directory.CreateDirectory(outputFolder);
+
+        var mutator = new MutateFuncs(
+            MenuPointValue, MenuFrameshiftValue, MenuFrameInsertDeleteValue,
+            MenuDuplicationsValue, MenuDeletionValue, MenuInversionValue,
+            MenuTranslocationValue, (int)MenuCyclesValue
+        );
+
+        var manager = new FileManager();
+        var files = manager.GetFilesInFolder(SelectedFolderPath);
+
+        foreach (var file in files)
+        {
+            string fileName = Path.GetFileName(file);
+            string dnaPath = Path.Combine(SelectedFolderPath, "dna",
+                Path.GetFileNameWithoutExtension(file) + ".dna");
+            string outputPath = Path.Combine(outputFolder, fileName);
+
+            if (!File.Exists(dnaPath)) continue;
+
+            // Copy .dna to temp working file, then mutate to output
+            string workingDna = dnaPath + ".work";
+            File.Copy(dnaPath, workingDna, overwrite: true);
+
+            await Task.Run(() => mutator.MutateDNAFile(workingDna, workingDna + ".mutated"));
+
+            string mutatedDna = workingDna + ".mutated";
+            await Task.Run(() => manager.ConvertDNAToFile(mutatedDna, outputFolder));
+
+            File.Delete(mutatedDna);
+        }
+
+        Console.WriteLine($"Debug: Mutation complete (directory: {outputFolder})");
+    }
 }
