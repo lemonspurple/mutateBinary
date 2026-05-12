@@ -36,7 +36,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private float _menuTranslocationValue = default;
     [ObservableProperty]
-    private double _menuCyclesValue = 1;
+    private int _menuCyclesValue = 1;
 
     
 

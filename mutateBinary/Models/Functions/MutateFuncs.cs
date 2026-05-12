@@ -1,4 +1,6 @@
-namespace mutateBinary.Models.Data
+using System.IO;
+
+namespace mutateBinary.Models.Functions
 {
     public class MutateFuncs
     {
@@ -6,28 +8,45 @@ namespace mutateBinary.Models.Data
         float frameshiftValue = default;
         float frameInsertDeleteValue = default;
         float duplicationValue = default;
-        float deletionValue = default; 
+        float deletionValue = default;
         float inversionValue = default;
         float translocationValue = default;
-        double cyclesValue = default;
-    
+        int cyclesValue = default;
 
-    public MutateFuncs(float _pointValue, float _frameshiftValue, float _frameInsertDeleteValue, float _duplicationValue, float _deletionValue, float _inversionValue, float _translocationValue, double _cyclesValue)
-    {
-        pointValue = _pointValue;
-        frameshiftValue = _frameshiftValue;
-        frameInsertDeleteValue = _frameInsertDeleteValue;
-        duplicationValue = _duplicationValue;
-        deletionValue = _deletionValue;
-        inversionValue = _inversionValue;
-        translocationValue = _translocationValue;
-        cyclesValue = _cyclesValue;
-    }
 
-    public void printMutateValuesToDebug()
+        public MutateFuncs(float _pointValue, float _frameshiftValue, float _frameInsertDeleteValue, float _duplicationValue, float _deletionValue, float _inversionValue, float _translocationValue, int _cyclesValue)
         {
-            
+            pointValue = _pointValue;
+            frameshiftValue = _frameshiftValue;
+            frameInsertDeleteValue = _frameInsertDeleteValue;
+            duplicationValue = _duplicationValue;
+            deletionValue = _deletionValue;
+            inversionValue = _inversionValue;
+            translocationValue = _translocationValue;
+            cyclesValue = _cyclesValue;
         }
+
+        public void printMutateValuesToDebug()
+        {
+
+        }
+
+
+
+        public void MutateDNAFile(string sourcePath, string outputPath)
+        {
+            string tempPath = sourcePath + ".tmp";
+
+            for (int cycle = 0; cycle < cyclesValue; cycle++)
+            {
+                //ApplyPerBaseMutations(sourcePath, tempPath);
+                //ApplyStructuralMutations(tempPath, sourcePath);
+                File.Delete(tempPath);
+            }
+
+            File.Move(sourcePath, outputPath, overwrite: true);
+        }
+
 
 
         /* TODO
@@ -56,5 +75,6 @@ namespace mutateBinary.Models.Data
     
         Evolutions: How often are the mutations applied
         */
+
     }
 }
