@@ -144,7 +144,7 @@ namespace mutateBinary.Models.Functions
         }
 
         /* ---------------------------------------------------
-                        Per base mutations
+                        Per structure mutations
         --------------------------------------------------- */
 
         /* Helpers */
@@ -152,6 +152,7 @@ namespace mutateBinary.Models.Functions
         {
             int segLen = (int)Math.Max(4, fileLength * rng.Next(1, 11) / 100L);
             segLen = (segLen / 4) * 4;
+            if (fileLength - segLen <= 0) return (0, (int)fileLength); // guards against division by 0
             long segStart = (rng.NextInt64(0, fileLength - segLen) / 4) * 4;
             return (segStart, segLen);
         }
@@ -277,7 +278,7 @@ namespace mutateBinary.Models.Functions
             }
 
             long shortenedLen = fileLen - segLen;
-            long insertPos = ((long)(Math.Abs(rng.NextInt64()) % (shortenedLen + 1)) / 4) * 4;
+            long insertPos = (rng.NextInt64(0, shortenedLen + 1) / 4) * 4;
 
             using (var sr = new StreamReader(tmpPath, Encoding.ASCII))
             using (var sw = new StreamWriter(targetPath, false, Encoding.ASCII))
@@ -302,7 +303,6 @@ namespace mutateBinary.Models.Functions
         {
             string tmp1 = sourcePath + ".s1";
             string tmp2 = sourcePath + ".s2";
-            string tmp3 = sourcePath + ".s3";
 
             ApplyInFrameInsertDelete(sourcePath, tmp1);
             ApplyDeletion(tmp1, tmp2); File.Delete(tmp1);
