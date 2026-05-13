@@ -42,6 +42,10 @@
             <Button Content="Decode DNA to data"
                 Command="{Binding DecodeFilesCommand}"
                 Background="DarkSlateBlue" Foreground="White" />
+
+            <Button Content="Print Debug"
+                Command="{Binding PrintDebugLogCommand}"
+                Background="DarkSlateBlue" Foreground="White" />
         </StackPanel>
 
         <!-- Slider for mutation controll -->
@@ -243,9 +247,6 @@
         <!-- Mutate button-->
 
         <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
-            <Button Content="Print Debug"
-                Command="{Binding PrintDebugLogCommand}"
-                Background="Yellow" Foreground="Black" Margin="0,10,20,0" />
             <Button Content="Mutate data"
                 Command="{Binding MutateDataCommand}"
                 Background="Yellow" Foreground="Black" Margin="0,10,20,0" />

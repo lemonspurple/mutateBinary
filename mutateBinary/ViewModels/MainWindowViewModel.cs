@@ -128,9 +128,12 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     public async Task PrintDebugLogAsync()
     {
-        //MutateFuncs mutateFuncs = new MutateFuncs();
-        //mutateFuncs.printMutateValuesToDebug();
-        Console.WriteLine($"Debug+{MenuPointValue}+{MenuFrameshiftValue}+{MenuFrameInsertDeleteValue}+{MenuDuplicationsValue}+{MenuDeletionValue}+{MenuInversionValue}+{MenuTranslocationValue}+{MenuCyclesValue}");
+        var mutateDebug = new MutateFuncs(
+            MenuPointValue, MenuFrameshiftValue, MenuFrameInsertDeleteValue,
+            MenuDuplicationsValue, MenuDeletionValue, MenuInversionValue,
+            MenuTranslocationValue, MenuCyclesValue
+        );
+        mutateDebug.printMutateValuesToDebug();
     }
 
     [RelayCommand]
@@ -145,7 +148,7 @@ public partial class MainWindowViewModel : ViewModelBase
         var mutator = new MutateFuncs(
             MenuPointValue, MenuFrameshiftValue, MenuFrameInsertDeleteValue,
             MenuDuplicationsValue, MenuDeletionValue, MenuInversionValue,
-            MenuTranslocationValue, (int)MenuCyclesValue
+            MenuTranslocationValue, MenuCyclesValue
         );
 
         var manager = new FileManager();
