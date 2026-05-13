@@ -91,7 +91,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             // fetch filename without old path
             string fileName = Path.GetFileName(file);  // "photo.jpg"
-
+            //TODO FIX NAMING. THE SUFFIX HAS TO BE CACHED SOMEWHERE
             // start conversion
             await Task.Run(() => manager.ConvertFileToDNA(file, outputFolderDNA));
         }
@@ -154,7 +154,7 @@ public partial class MainWindowViewModel : ViewModelBase
         var manager = new FileManager();
         var files = manager.GetFilesInFolder(SelectedFolderPath);
 
-        foreach (var file in files)
+        foreach (var file in files) //TODO Hier fehlt der Data to Binary und Binary to Data Schritt
         {
             string fileName = Path.GetFileName(file);
             string dnaPath = Path.Combine(SelectedFolderPath, "dna",
