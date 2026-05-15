@@ -25,7 +25,7 @@
 
                 <!-- Block 1: Point -->
                 <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="10">
-                    <StackPanel Width="220">
+                    <StackPanel Width="190">
                         <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
                             <TextBlock Text="Point" VerticalAlignment="Center" />
                             <Border Width="16" Height="16" CornerRadius="8"
@@ -38,17 +38,17 @@
                                            VerticalAlignment="Center" />
                             </Border>
                         </StackPanel>
-                        <Slider Value="{Binding MenuPointValue, Mode=TwoWay}" Minimum="0.00" Maximum="100.00"
+                        <Slider Value="{Binding MenuPointValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
                                 SmallChange="0.01" LargeChange="1" />
                     </StackPanel>
                     <NumericUpDown Value="{Binding MenuPointValue, Mode=TwoWay}"
-                                   Minimum="0.00" Maximum="100.00" Increment="0.01"
-                                   FormatString="F2" Width="120" VerticalAlignment="Bottom" />
+                                   Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
+                                   FormatString="F5" Width="150" VerticalAlignment="Bottom" />
                 </StackPanel>
 
                 <!-- Block 2: Frameshift -->
                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="10">
-                    <StackPanel Width="220">
+                    <StackPanel Width="190">
                         <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
                             <TextBlock Text="Frameshift" VerticalAlignment="Center" />
                             <Border Width="16" Height="16" CornerRadius="8"
@@ -61,17 +61,17 @@
                                            VerticalAlignment="Center" />
                             </Border>
                         </StackPanel>
-                        <Slider Value="{Binding MenuFrameshiftValue, Mode=TwoWay}" Minimum="0.00" Maximum="100.00"
+                        <Slider Value="{Binding MenuFrameshiftValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
                                 SmallChange="0.01" LargeChange="1" />
                     </StackPanel>
                     <NumericUpDown Value="{Binding MenuFrameshiftValue, Mode=TwoWay}"
-                                   Minimum="0.00" Maximum="100.00" Increment="0.01"
-                                   FormatString="F2" Width="120" VerticalAlignment="Bottom" />
+                                   Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
+                                   FormatString="F5" Width="150" VerticalAlignment="Bottom" />
                 </StackPanel>
 
                 <!-- Block 3: Frame insert / delete -->
                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="10">
-                    <StackPanel Width="220">
+                    <StackPanel Width="190">
                         <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
                             <TextBlock Text="Frame Insert / Delete" VerticalAlignment="Center"
                                        TextWrapping="NoWrap" />
@@ -85,17 +85,17 @@
                                            VerticalAlignment="Center" />
                             </Border>
                         </StackPanel>
-                        <Slider Value="{Binding MenuFrameInsertDeleteValue, Mode=TwoWay}" Minimum="0.00" Maximum="100.00"
+                        <Slider Value="{Binding MenuFrameInsertDeleteValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
                                 SmallChange="0.01" LargeChange="1" />
                     </StackPanel>
                     <NumericUpDown Value="{Binding MenuFrameInsertDeleteValue, Mode=TwoWay}"
-                                   Minimum="0.00" Maximum="100.00" Increment="0.01"
-                                   FormatString="F2" Width="120" VerticalAlignment="Bottom" />
+                                   Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
+                                   FormatString="F5" Width="150" VerticalAlignment="Bottom" />
                 </StackPanel>
 
                 <!-- Block 4: Duplications -->
                 <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="10">
-                    <StackPanel Width="220">
+                    <StackPanel Width="190">
                         <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
                             <TextBlock Text="Duplications" VerticalAlignment="Center"
                                        TextWrapping="NoWrap" />
@@ -109,17 +109,17 @@
                                            VerticalAlignment="Center" />
                             </Border>
                         </StackPanel>
-                        <Slider Value="{Binding MenuDuplicationsValue, Mode=TwoWay}" Minimum="0.00" Maximum="100.00"
+                        <Slider Value="{Binding MenuDuplicationsValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
                                 SmallChange="0.01" LargeChange="1" />
                     </StackPanel>
                     <NumericUpDown Value="{Binding MenuDuplicationsValue, Mode=TwoWay}"
-                                   Minimum="0.00" Maximum="100.00" Increment="0.01"
-                                   FormatString="F2" Width="120" VerticalAlignment="Bottom" />
+                                   Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
+                                   FormatString="F5" Width="150" VerticalAlignment="Bottom" />
                 </StackPanel>
 
                 <!-- Block 5: Deletion -->
                 <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="10">
-                    <StackPanel Width="220">
+                    <StackPanel Width="190">
                         <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
                             <TextBlock Text="Deletion" VerticalAlignment="Center" TextWrapping="NoWrap" />
                             <Border Width="16" Height="16" CornerRadius="8"
@@ -132,17 +132,17 @@
                                            VerticalAlignment="Center" />
                             </Border>
                         </StackPanel>
-                        <Slider Value="{Binding MenuDeletionValue, Mode=TwoWay}" Minimum="0.00" Maximum="100.00"
+                        <Slider Value="{Binding MenuDeletionValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
                                 SmallChange="0.01" LargeChange="1" />
                     </StackPanel>
                     <NumericUpDown Value="{Binding MenuDeletionValue, Mode=TwoWay}"
-                                   Minimum="0.00" Maximum="100.00" Increment="0.01"
-                                   FormatString="F2" Width="120" VerticalAlignment="Bottom" />
+                                   Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
+                                   FormatString="F5" Width="150" VerticalAlignment="Bottom" />
                 </StackPanel>
 
                 <!-- Block 6: Inversion -->
                 <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="10">
-                    <StackPanel Width="220">
+                    <StackPanel Width="190">
                         <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
                             <TextBlock Text="Inversion" VerticalAlignment="Center" TextWrapping="NoWrap" />
                             <Border Width="16" Height="16" CornerRadius="8"
@@ -155,17 +155,17 @@
                                            VerticalAlignment="Center" />
                             </Border>
                         </StackPanel>
-                        <Slider Value="{Binding MenuInversionValue, Mode=TwoWay}" Minimum="0.00" Maximum="100.00"
+                        <Slider Value="{Binding MenuInversionValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
                                 SmallChange="0.01" LargeChange="1" />
                     </StackPanel>
                     <NumericUpDown Value="{Binding MenuInversionValue, Mode=TwoWay}"
-                                   Minimum="0.00" Maximum="100.00" Increment="0.01"
-                                   FormatString="F2" Width="120" VerticalAlignment="Bottom" />
+                                   Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
+                                   FormatString="F5" Width="150" VerticalAlignment="Bottom" />
                 </StackPanel>
 
                 <!-- Block 7: Translocation -->
                 <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Spacing="10">
-                    <StackPanel Width="220">
+                    <StackPanel Width="190">
                         <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
                             <TextBlock Text="Translocation" VerticalAlignment="Center"
                                        TextWrapping="NoWrap" />
@@ -179,12 +179,12 @@
                                            VerticalAlignment="Center" />
                             </Border>
                         </StackPanel>
-                        <Slider Value="{Binding MenuTranslocationValue, Mode=TwoWay}" Minimum="0.00" Maximum="100.00"
+                        <Slider Value="{Binding MenuTranslocationValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
                                 SmallChange="0.01" LargeChange="1" />
                     </StackPanel>
                     <NumericUpDown Value="{Binding MenuTranslocationValue, Mode=TwoWay}"
-                                   Minimum="0.00" Maximum="100.00" Increment="0.01"
-                                   FormatString="F2" Width="120" VerticalAlignment="Bottom" />
+                                   Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
+                                   FormatString="F5" Width="150" VerticalAlignment="Bottom" />
                 </StackPanel>
 
  <!-- Block 8: Cycles & Repetitions -->
