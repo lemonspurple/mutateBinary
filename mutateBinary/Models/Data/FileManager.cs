@@ -46,7 +46,7 @@ namespace mutateBinary.Models.Data
             try
             {
                 // generate output filename: originalname.dna
-                string fileName = Path.GetFileNameWithoutExtension(sourcePath) + ".dna";
+                string fileName = Path.GetFileName(sourcePath) + ".dna";
                 string targetFilePath = Path.Combine(targetDirectory, fileName);
 
                 using (FileStream fs = File.OpenRead(sourcePath))

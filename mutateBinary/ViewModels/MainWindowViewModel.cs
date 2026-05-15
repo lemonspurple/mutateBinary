@@ -39,6 +39,20 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private int _menuCyclesValue = 1;
 
+    // Helper method that adds parameter values to filename as methodology. 
+    private string BuildMutationSuffix()
+    {
+        var sb = new System.Text.StringBuilder();
+        if (MenuPointValue != 0) sb.Append($"_pt{MenuPointValue}");
+        if (MenuFrameshiftValue != 0) sb.Append($"_fs{MenuFrameshiftValue}");
+        if (MenuFrameInsertDeleteValue != 0) sb.Append($"_fi{MenuFrameInsertDeleteValue}");
+        if (MenuDuplicationsValue != 0) sb.Append($"_du{MenuDuplicationsValue}");
+        if (MenuDeletionValue != 0) sb.Append($"_de{MenuDeletionValue}");
+        if (MenuInversionValue != 0) sb.Append($"_in{MenuInversionValue}");
+        if (MenuTranslocationValue != 0) sb.Append($"_tr{MenuTranslocationValue}");
+        sb.Append($"_c{MenuCyclesValue}");
+        return sb.ToString();
+    }
 
 
     [RelayCommand]
@@ -147,7 +161,7 @@ public partial class MainWindowViewModel : ViewModelBase
         string dnaFolder = Path.Combine(SelectedFolderPath, "dna");
         if (!Directory.Exists(dnaFolder))
             Directory.CreateDirectory(dnaFolder);
-            
+
         var mutator = new MutateFuncs(
             MenuPointValue, MenuFrameshiftValue, MenuFrameInsertDeleteValue,
             MenuDuplicationsValue, MenuDeletionValue, MenuInversionValue,
@@ -157,10 +171,10 @@ public partial class MainWindowViewModel : ViewModelBase
         var manager = new FileManager();
         var files = manager.GetFilesInFolder(SelectedFolderPath);
 
-        foreach (var file in files) 
+        foreach (var file in files)
         {
             string fileName = Path.GetFileName(file);
-            string dnaPath = Path.Combine(dnaFolder, Path.GetFileNameWithoutExtension(file) + ".dna");
+            string dnaPath = Path.Combine(dnaFolder, Path.GetFileName(file) + ".dna");
             string outputPath = Path.Combine(outputFolder, fileName);
 
             if (!File.Exists(dnaPath))
@@ -176,6 +190,9 @@ public partial class MainWindowViewModel : ViewModelBase
             await Task.Run(() => manager.ConvertDNAToFile(mutatedDna, outputFolder));
 
             File.Delete(mutatedDna);
+            string decodedFile = Path.Combine(outputFolder, Path.GetFileNameWithoutExtension(mutatedDna));
+            string finalName = Path.GetFileNameWithoutExtension(file) + "_mutated" + BuildMutationSuffix() + Path.GetExtension(file);
+            File.Move(decodedFile, Path.Combine(outputFolder, finalName), overwrite: true);
         }
 
         Console.WriteLine($"Debug: Mutation complete (directory: {outputFolder})");
