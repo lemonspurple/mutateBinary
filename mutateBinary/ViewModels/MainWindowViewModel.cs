@@ -75,7 +75,7 @@ public partial class MainWindowViewModel : ViewModelBase
         // has a folder been selected
         if (string.IsNullOrEmpty(SelectedFolderPath)) return;
 
-        // set folder path + add bin as directory
+        // set folder path + add dna as directory
         string outputFolderDNA = Path.Combine(SelectedFolderPath, "dna");
 
 
@@ -140,11 +140,14 @@ public partial class MainWindowViewModel : ViewModelBase
     public async Task MutateDataAsync()
     {
         if (string.IsNullOrEmpty(SelectedFolderPath)) return;
-
+        // self healing segment that creates DNA folders, in case it hasn't yet.
         string outputFolder = Path.Combine(SelectedFolderPath, "mutated");
         if (!Directory.Exists(outputFolder))
             Directory.CreateDirectory(outputFolder);
-
+        string dnaFolder = Path.Combine(SelectedFolderPath, "dna");
+        if (!Directory.Exists(dnaFolder))
+            Directory.CreateDirectory(dnaFolder);
+            
         var mutator = new MutateFuncs(
             MenuPointValue, MenuFrameshiftValue, MenuFrameInsertDeleteValue,
             MenuDuplicationsValue, MenuDeletionValue, MenuInversionValue,
@@ -154,14 +157,14 @@ public partial class MainWindowViewModel : ViewModelBase
         var manager = new FileManager();
         var files = manager.GetFilesInFolder(SelectedFolderPath);
 
-        foreach (var file in files) //TODO Hier fehlt der Data to Binary und Binary to Data Schritt
+        foreach (var file in files) 
         {
             string fileName = Path.GetFileName(file);
-            string dnaPath = Path.Combine(SelectedFolderPath, "dna",
-                Path.GetFileNameWithoutExtension(file) + ".dna");
+            string dnaPath = Path.Combine(dnaFolder, Path.GetFileNameWithoutExtension(file) + ".dna");
             string outputPath = Path.Combine(outputFolder, fileName);
 
-            if (!File.Exists(dnaPath)) continue;
+            if (!File.Exists(dnaPath))
+                await Task.Run(() => manager.ConvertFileToDNA(file, dnaFolder));
 
             // Copy .dna to temp working file, then mutate to output
             string workingDna = dnaPath + ".work";
