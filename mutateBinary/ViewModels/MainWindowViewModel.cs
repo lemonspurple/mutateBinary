@@ -38,6 +38,8 @@ public partial class MainWindowViewModel : ViewModelBase
     private float _menuTranslocationValue = default;
     [ObservableProperty]
     private int _menuCyclesValue = 1;
+    [ObservableProperty]
+    private int _menuRepetitionValue = 0;
 
     // Helper method that adds parameter values to filename as methodology. 
     private string BuildMutationSuffix()
@@ -145,7 +147,7 @@ public partial class MainWindowViewModel : ViewModelBase
         var mutateDebug = new MutateFuncs(
             MenuPointValue, MenuFrameshiftValue, MenuFrameInsertDeleteValue,
             MenuDuplicationsValue, MenuDeletionValue, MenuInversionValue,
-            MenuTranslocationValue, MenuCyclesValue
+            MenuTranslocationValue, MenuCyclesValue, MenuRepetitionValue
         );
         mutateDebug.printMutateValuesToDebug();
     }
@@ -165,7 +167,7 @@ public partial class MainWindowViewModel : ViewModelBase
         var mutator = new MutateFuncs(
             MenuPointValue, MenuFrameshiftValue, MenuFrameInsertDeleteValue,
             MenuDuplicationsValue, MenuDeletionValue, MenuInversionValue,
-            MenuTranslocationValue, MenuCyclesValue
+            MenuTranslocationValue, MenuCyclesValue, MenuRepetitionValue
         );
 
         var manager = new FileManager();
