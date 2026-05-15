@@ -219,7 +219,7 @@
             <Border Width="16" Height="16" CornerRadius="8"
                     BorderBrush="Gray" BorderThickness="1"
                     Background="Transparent" Cursor="Help"
-                    ToolTip.Tip="How often do you want to repeat the mutation process?">
+                    ToolTip.Tip="Additional mutation runs per file. Creates multiple output files. &#10;0 = 1 output, 1 = 2 outputs, 3 = 4 outputs, etc.">
                 <TextBlock Text="?" FontSize="11" FontWeight="Bold"
                            Foreground="Gray"
                            HorizontalAlignment="Center"

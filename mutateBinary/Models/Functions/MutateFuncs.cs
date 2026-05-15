@@ -64,7 +64,7 @@ namespace mutateBinary.Models.Functions
 
         public void printMutateValuesToDebug()
         {
-            Console.WriteLine($"Point: {pointValue},Frameshift: {frameshiftValue}, Frame Insert/Delete: {frameInsertDeleteValue}, Duplication: {duplicationValue}, Deletion: {deletionValue}, Inversion: {inversionValue}, Translocation: {translocationValue}, Cycles: {cyclesValue}");
+            Console.WriteLine($"Point: {pointValue}, Frameshift: {frameshiftValue}, Frame Insert/Delete: {frameInsertDeleteValue}, Duplication: {duplicationValue}, Deletion: {deletionValue}, Inversion: {inversionValue}, Translocation: {translocationValue}, Cycles: {cyclesValue}, Repetitions: {repetitionValue}");
         }
 
         /* ---------------------------------------------------

@@ -12,6 +12,7 @@ using CommunityToolkit.Mvvm.Input;
 using mutateBinary.Models.Data;
 using Avalonia.Controls;
 using System;
+using System.Linq;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
@@ -42,7 +43,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private int _menuRepetitionValue = 0;
 
     // Helper method that adds parameter values to filename as methodology. 
-    private string BuildMutationSuffix()
+    private string BuildMutationSuffix(int repetitionIndex)
     {
         var sb = new System.Text.StringBuilder();
         if (MenuPointValue != 0) sb.Append($"_pt{MenuPointValue}");
@@ -53,6 +54,7 @@ public partial class MainWindowViewModel : ViewModelBase
         if (MenuInversionValue != 0) sb.Append($"_in{MenuInversionValue}");
         if (MenuTranslocationValue != 0) sb.Append($"_tr{MenuTranslocationValue}");
         sb.Append($"_c{MenuCyclesValue}");
+        sb.Append($"_r{repetitionIndex}");
         return sb.ToString();
     }
 
@@ -156,6 +158,14 @@ public partial class MainWindowViewModel : ViewModelBase
     public async Task MutateDataAsync()
     {
         if (string.IsNullOrEmpty(SelectedFolderPath)) return;
+        
+        // Guard against negative repetition values
+        if (MenuRepetitionValue < 0)
+        {
+            Console.WriteLine("Error: Repetition value cannot be negative");
+            return;
+        }
+
         // self healing segment that creates DNA folders, in case it hasn't yet.
         string outputFolder = Path.Combine(SelectedFolderPath, "mutated");
         if (!Directory.Exists(outputFolder))
@@ -171,32 +181,79 @@ public partial class MainWindowViewModel : ViewModelBase
         );
 
         var manager = new FileManager();
-        var files = manager.GetFilesInFolder(SelectedFolderPath);
+        var allFiles = manager.GetFilesInFolder(SelectedFolderPath);
+
+        Console.WriteLine($"Debug: Selected folder: {SelectedFolderPath}");
+        Console.WriteLine($"Debug: Total files found in root: {allFiles.Count}");
+        foreach (var f in allFiles)
+            Console.WriteLine($"  Found: {Path.GetFileName(f)}");
+
+        // Filter out generated files and artifacts
+        var files = allFiles.Where(f => 
+        {
+            string fileName = Path.GetFileName(f).ToLowerInvariant();
+            
+            if (fileName.EndsWith(".dna") || fileName.EndsWith(".work") || 
+                fileName.EndsWith(".mutated") || fileName.EndsWith(".tmp") ||
+                fileName.EndsWith(".s1") || fileName.EndsWith(".s2") || fileName.EndsWith(".tl"))
+            {
+                Console.WriteLine($"  Excluded (bad extension): {fileName}");
+                return false;
+            }
+            
+            return true;
+        }).ToList();
+
+        Console.WriteLine($"Debug: Files after filter: {files.Count}");
+
+        int totalOutputs = MenuRepetitionValue + 1;
+        Console.WriteLine($"Debug: Processing {files.Count} files with {totalOutputs} outputs each (Repetition={MenuRepetitionValue})");
 
         foreach (var file in files)
         {
             string fileName = Path.GetFileName(file);
-            string dnaPath = Path.Combine(dnaFolder, Path.GetFileName(file) + ".dna");
-            string outputPath = Path.Combine(outputFolder, fileName);
+            string baseName = Path.GetFileNameWithoutExtension(file);
+            string extension = Path.GetExtension(file);
+            string dnaPath = Path.Combine(dnaFolder, fileName + ".dna");
 
+            // Ensure DNA file exists
             if (!File.Exists(dnaPath))
                 await Task.Run(() => manager.ConvertFileToDNA(file, dnaFolder));
 
-            // Copy .dna to temp working file, then mutate to output
-            string workingDna = dnaPath + ".work";
-            File.Copy(dnaPath, workingDna, overwrite: true);
+            // Repetition loop: create multiple output files
+            for (int repetitionIndex = 0; repetitionIndex <= MenuRepetitionValue; repetitionIndex++)
+            {
+                // Create unique temp files for this repetition
+                string workingDna = dnaPath + $".r{repetitionIndex}.work";
+                string mutatedDna = workingDna + ".mutated";
 
-            await Task.Run(() => mutator.MutateDNAFile(workingDna, workingDna + ".mutated"));
+                // Copy original DNA to working file
+                File.Copy(dnaPath, workingDna, overwrite: true);
 
-            string mutatedDna = workingDna + ".mutated";
-            await Task.Run(() => manager.ConvertDNAToFile(mutatedDna, outputFolder));
+                // Mutate
+                await Task.Run(() => mutator.MutateDNAFile(workingDna, mutatedDna));
 
-            File.Delete(mutatedDna);
-            string decodedFile = Path.Combine(outputFolder, Path.GetFileNameWithoutExtension(mutatedDna));
-            string finalName = Path.GetFileNameWithoutExtension(file) + "_mutated" + BuildMutationSuffix() + Path.GetExtension(file);
-            File.Move(decodedFile, Path.Combine(outputFolder, finalName), overwrite: true);
+                // Decode to binary
+                await Task.Run(() => manager.ConvertDNAToFile(mutatedDna, outputFolder));
+
+                // Cleanup temp files
+                File.Delete(workingDna);
+                File.Delete(mutatedDna);
+
+                // Rename decoded file to final name
+                string decodedFile = Path.Combine(outputFolder, Path.GetFileNameWithoutExtension(mutatedDna));
+                string finalName = baseName + "_mutated" + BuildMutationSuffix(repetitionIndex) + extension;
+                string finalPath = Path.Combine(outputFolder, finalName);
+                
+                if (File.Exists(finalPath))
+                    File.Delete(finalPath);
+                
+                File.Move(decodedFile, finalPath);
+
+                Console.WriteLine($"  → Generated: {finalName}");
+            }
         }
 
-        Console.WriteLine($"Debug: Mutation complete (directory: {outputFolder})");
+        Console.WriteLine($"Debug: Mutation complete - {files.Count} files × {totalOutputs} outputs = {files.Count * totalOutputs} total outputs (directory: {outputFolder})");
     }
 }
