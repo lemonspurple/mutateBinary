@@ -170,9 +170,16 @@ namespace mutateBinary.Models.Functions
             _ => b
         };
 
+        private bool TryRollOrCopy(float probability, string src, string dst)
+        {
+            if (Roll(probability)) return true;
+            File.Copy(src, dst, true);
+            return false;
+        }
+
         private void ApplyDeletion(string sourcePath, string targetPath)
         {
-            if (!Roll(deletionValue)) { File.Copy(sourcePath, targetPath, true); return; }
+            if (!TryRollOrCopy(deletionValue, sourcePath, targetPath)) return;
 
             long fileLen = new FileInfo(sourcePath).Length;
             var (segStart, segLen) = PickSegment(fileLen);
@@ -192,7 +199,7 @@ namespace mutateBinary.Models.Functions
 
         private void ApplyDuplication(string sourcePath, string targetPath)
         {
-            if (!Roll(duplicationValue)) { File.Copy(sourcePath, targetPath, true); return; }
+            if (!TryRollOrCopy(duplicationValue, sourcePath, targetPath)) return;
 
             long fileLen = new FileInfo(sourcePath).Length;
             var (segStart, segLen) = PickSegment(fileLen);
@@ -222,7 +229,7 @@ namespace mutateBinary.Models.Functions
 
         private void ApplyInversion(string sourcePath, string targetPath)
         {
-            if (!Roll(inversionValue)) { File.Copy(sourcePath, targetPath, true); return; }
+            if (!TryRollOrCopy(inversionValue, sourcePath, targetPath)) return;
 
             long fileLen = new FileInfo(sourcePath).Length;
             var (segStart, segLen) = PickSegment(fileLen);
@@ -256,7 +263,7 @@ namespace mutateBinary.Models.Functions
 
         private void ApplyTranslocation(string sourcePath, string targetPath)
         {
-            if (!Roll(translocationValue)) { File.Copy(sourcePath, targetPath, true); return; }
+            if (!TryRollOrCopy(translocationValue, sourcePath, targetPath)) return;
 
             long fileLen = new FileInfo(sourcePath).Length;
             if (fileLen < 8) { File.Copy(sourcePath, targetPath, true); return; }

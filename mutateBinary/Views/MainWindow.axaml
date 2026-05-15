@@ -7,7 +7,31 @@
         Icon="/Assets/logo.ico"
         Width="780" Height="670"
         MinWidth="780" MinHeight="670"> 
-<ScrollViewer>
+<Panel>
+    <!-- About Button -->
+    <Button Name="AboutButton" Content="About"
+            HorizontalAlignment="Right" VerticalAlignment="Top"
+            Margin="20" ZIndex="1"
+            Click="AboutButton_Click" />
+
+    <Popup Name="AboutPopup"
+           PlacementTarget="{Binding $parent[Window]}"
+           Placement="Center"
+           IsLightDismissEnabled="True">
+        <Border Background="#121212" BorderBrush="Gray" BorderThickness="1"
+                Padding="15" Width="350" Height="150">
+            <StackPanel Spacing="8">
+                <TextBlock Text="mutateBinary 0.2.1" FontWeight="Bold" FontSize="14"/>
+                <TextBlock Text="File to Binary to DNA converter with mutation functionality." TextWrapping="Wrap"/>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="GitHub" Click="OpenGitHub_Click" />
+                <Button Content="Close" Click="ClosePopup_Click" />
+</StackPanel>
+            </StackPanel>
+        </Border>
+    </Popup>
+
+    <ScrollViewer>
         <StackPanel Margin="20" Spacing="10">
 
             <TextBlock Text="{Binding $parent[Window].Title}" FontSize="18" FontWeight="Bold" />
@@ -295,4 +319,5 @@
 
         </StackPanel>
 </ScrollViewer>
+</Panel>
 </Window>
