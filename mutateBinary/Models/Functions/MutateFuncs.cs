@@ -43,12 +43,13 @@ namespace mutateBinary.Models.Functions
         float inversionValue = default;
         float translocationValue = default;
         int cyclesValue = default;
+        int repetitionValue = default;
         private static readonly Random rng = new Random();
 
         /* ---------------------------------------------------
                 Constructor to draw values from UI
         --------------------------------------------------- */
-        public MutateFuncs(float _pointValue, float _frameshiftValue, float _frameInsertDeleteValue, float _duplicationValue, float _deletionValue, float _inversionValue, float _translocationValue, int _cyclesValue)
+        public MutateFuncs(float _pointValue, float _frameshiftValue, float _frameInsertDeleteValue, float _duplicationValue, float _deletionValue, float _inversionValue, float _translocationValue, int _cyclesValue, int _repetitionValue)
         {
             pointValue = _pointValue;
             frameshiftValue = _frameshiftValue;
@@ -58,11 +59,12 @@ namespace mutateBinary.Models.Functions
             inversionValue = _inversionValue;
             translocationValue = _translocationValue;
             cyclesValue = _cyclesValue;
+            repetitionValue = _repetitionValue;
         }
 
         public void printMutateValuesToDebug()
         {
-            Console.WriteLine($"Point: {pointValue},Frameshift: {frameshiftValue}, Frame Insert/Delete: {frameInsertDeleteValue}, Duplication: {duplicationValue}, Deletion: {deletionValue}, Inversion: {inversionValue}, Translocation: {translocationValue}, Cycles: {cyclesValue}");
+            Console.WriteLine($"Point: {pointValue}, Frameshift: {frameshiftValue}, Frame Insert/Delete: {frameInsertDeleteValue}, Duplication: {duplicationValue}, Deletion: {deletionValue}, Inversion: {inversionValue}, Translocation: {translocationValue}, Cycles: {cyclesValue}, Repetitions: {repetitionValue}");
         }
 
         /* ---------------------------------------------------
