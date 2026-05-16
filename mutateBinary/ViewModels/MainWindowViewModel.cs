@@ -91,6 +91,17 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    public async Task OpenSelectedDirectoryAsync()
+    {
+        if (string.IsNullOrEmpty(SelectedFolderPath)) return;
+        var topLevel = TopLevel.GetTopLevel((Application.Current?.ApplicationLifetime 
+            as IClassicDesktopStyleApplicationLifetime)?.MainWindow);
+        await topLevel?.Launcher.LaunchDirectoryInfoAsync(
+            new DirectoryInfo(SelectedFolderPath));
+
+    }
+
+    [RelayCommand]
     public async Task EncodeFilesToDNAAsync()
     {
         // has a folder been selected
@@ -182,7 +193,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
-    private async Task MutationProcessChain( CancellationToken cancellationToken)
+    private async Task MutationProcessChain(CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(SelectedFolderPath)) return;
 

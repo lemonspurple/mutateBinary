@@ -132,3 +132,4 @@ $RECYCLE.BIN/
 
 _NCrunch*
 mutateBinary/mutateBinary.csproj.lscache
+.vscode/*.json
