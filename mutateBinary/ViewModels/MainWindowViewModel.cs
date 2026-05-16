@@ -12,13 +12,16 @@ using CommunityToolkit.Mvvm.Input;
 using mutateBinary.Models.Data;
 using Avalonia.Controls;
 using System;
+using System.Threading;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
     // Getting / Listing files in folder
     [ObservableProperty]
     private string? _selectedFolderPath;
+    private CancellationTokenSource? cts;
     public ObservableCollection<string> FoundFiles { get; } = new();
 
     // Mutate values
@@ -157,8 +160,32 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     public async Task MutateDataAsync()
     {
+        cts = new CancellationTokenSource();
+        try
+        {
+            await MutationProcessChain(cts.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            Console.WriteLine("Mutation process was cancelled.");
+        }
+    }
+
+    [RelayCommand]
+    public async Task CancelMutationAsync()
+    {
+        if (cts != null && !cts.IsCancellationRequested)
+        {
+            cts.Cancel();
+            cts.Dispose();
+            Console.WriteLine("Cancellation requested for mutation process.");
+        }
+    }
+
+    private async Task MutationProcessChain( CancellationToken cancellationToken)
+    {
         if (string.IsNullOrEmpty(SelectedFolderPath)) return;
-        
+
         // Guard against negative repetition values
         if (MenuRepetitionValue < 0)
         {
@@ -189,18 +216,18 @@ public partial class MainWindowViewModel : ViewModelBase
             Console.WriteLine($"  Found: {Path.GetFileName(f)}");
 
         // Filter out generated files and artifacts
-        var files = allFiles.Where(f => 
+        var files = allFiles.Where(f =>
         {
             string fileName = Path.GetFileName(f).ToLowerInvariant();
-            
-            if (fileName.EndsWith(".dna") || fileName.EndsWith(".work") || 
+
+            if (fileName.EndsWith(".dna") || fileName.EndsWith(".work") ||
                 fileName.EndsWith(".mutated") || fileName.EndsWith(".tmp") ||
                 fileName.EndsWith(".s1") || fileName.EndsWith(".s2") || fileName.EndsWith(".tl"))
             {
                 Console.WriteLine($"  Excluded (bad extension): {fileName}");
                 return false;
             }
-            
+
             return true;
         }).ToList();
 
@@ -244,13 +271,14 @@ public partial class MainWindowViewModel : ViewModelBase
                 string decodedFile = Path.Combine(outputFolder, Path.GetFileNameWithoutExtension(mutatedDna));
                 string finalName = baseName + "_mutated" + BuildMutationSuffix(repetitionIndex) + extension;
                 string finalPath = Path.Combine(outputFolder, finalName);
-                
+
                 if (File.Exists(finalPath))
                     File.Delete(finalPath);
-                
+
                 File.Move(decodedFile, finalPath);
 
                 Console.WriteLine($"  → Generated: {finalName}");
+                cancellationToken.ThrowIfCancellationRequested();
             }
         }
 
