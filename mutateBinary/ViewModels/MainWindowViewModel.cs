@@ -94,9 +94,16 @@ public partial class MainWindowViewModel : ViewModelBase
     public async Task OpenSelectedDirectoryAsync()
     {
         if (string.IsNullOrEmpty(SelectedFolderPath)) return;
+        
         var topLevel = TopLevel.GetTopLevel((Application.Current?.ApplicationLifetime 
             as IClassicDesktopStyleApplicationLifetime)?.MainWindow);
-        await topLevel?.Launcher.LaunchDirectoryInfoAsync(
+
+        if (topLevel == null) return;
+        // Encapsulating topLevel.Launcher into var launcher to perform a null check because otherwies the compiler keeps whining
+        var launcher = topLevel.Launcher;
+        if (launcher == null) return;
+
+        await launcher.LaunchDirectoryInfoAsync(
             new DirectoryInfo(SelectedFolderPath));
 
     }
