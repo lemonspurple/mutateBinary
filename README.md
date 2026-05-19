@@ -23,4 +23,4 @@ root/
 - For mutating image files for glitch-art purposes very small point mutation are recommended.
 - The app ueses filestream system, which means that a 20GB file is read byte by byte instead of being crammed into your RAM at once.
 - Things I'd like to do next are catalogued [here](https://github.com/lemonspurple/mutateBinary/issues) (multithread support/single executable/etc.).
-- It works non-destructive, meaning, that you convert a .dna file back to its original file, as long as not mutation has been applied.
+- It works non-destructive, meaning, that you can convert a .dna file back to its original file, as long as not mutation has been applied.
