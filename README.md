@@ -16,9 +16,9 @@ root/
 ```
 
 ## **Requirements:**
-.NET SDK 10.0 or newer
+.NET SDK
 
-# Additional Info
+#### Additional Info
 - The parameters are saved into the mutated files name so that it includes a way to document your methodology.
 - For mutating image files for glitch-art purposes very small point mutation are recommended.
 - The app ueses filestream system, which means that a 20GB file is read byte by byte instead of being crammed into your RAM at once.
