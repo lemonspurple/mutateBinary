@@ -3,321 +3,328 @@
         xmlns:vm="using:mutateBinary.ViewModels"
         x:Class="mutateBinary.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="mutateBinary 0.2.1"
+        Title="mutateBinary 0.2.2"
         Icon="/Assets/logo.ico"
         Width="780" Height="670"
-        MinWidth="780" MinHeight="670"> 
-<Panel>
-    <!-- About Button -->
-    <Button Name="AboutButton" Content="About"
-            HorizontalAlignment="Right" VerticalAlignment="Top"
-            Margin="20" ZIndex="1"
-            Click="AboutButton_Click" />
+        MinWidth="780" MinHeight="670">
+    <Panel>
+        <!-- About Button -->
+        <Button Name="AboutButton" Content="About"
+                HorizontalAlignment="Right" VerticalAlignment="Top"
+                Margin="20" ZIndex="1"
+                Click="AboutButton_Click" />
 
-    <Popup Name="AboutPopup"
-           PlacementTarget="{Binding $parent[Window]}"
-           Placement="Center"
-           IsLightDismissEnabled="True">
-        <Border Background="#121212" BorderBrush="Gray" BorderThickness="1"
-                Padding="15" Width="350" Height="150">
-            <StackPanel Spacing="8">
-                <TextBlock Text="mutateBinary 0.2.1" FontWeight="Bold" FontSize="14"/>
-                <TextBlock Text="File to Binary to DNA converter with mutation functionality." TextWrapping="Wrap"/>
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                <Button Content="GitHub" Click="OpenGitHub_Click" />
-                <Button Content="Close" Click="ClosePopup_Click" />
-</StackPanel>
-            </StackPanel>
-        </Border>
-    </Popup>
-
-    <ScrollViewer>
-        <StackPanel Margin="20" Spacing="10">
-
-            <TextBlock Text="{Binding $parent[Window].Title}" FontSize="18" FontWeight="Bold" />
-
-            <Button Content="Select folder..."
-                    Command="{Binding PickFolderCommand}"
-                    Background="DarkSlateBlue" Foreground="White" />
-            
-
-            <Grid RowDefinitions="Auto,Auto,Auto,Auto"
-                  ColumnDefinitions="*,*"
-                  RowSpacing="10"
-                  ColumnSpacing="20"
-                  Margin="0,20,0,10">
-
-                <!-- Block 1: Point -->
-                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="10">
-                    <StackPanel Width="190">
-                        <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
-                            <TextBlock Text="Point" VerticalAlignment="Center" />
-                            <Border Width="16" Height="16" CornerRadius="8"
-                                    BorderBrush="Gray" BorderThickness="1"
-                                    Background="Transparent" Cursor="Help"
-                                    ToolTip.Tip="Probability of point mutations. A single base is replaced by another. &#10;(GCA → GCC)">
-                                <TextBlock Text="?" FontSize="11" FontWeight="Bold"
-                                           Foreground="Gray"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center" />
-                            </Border>
-                        </StackPanel>
-                        <Slider Value="{Binding MenuPointValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
-                                SmallChange="0.01" LargeChange="1" />
+        <Popup Name="AboutPopup"
+               PlacementTarget="{Binding $parent[Window]}"
+               Placement="Center"
+               IsLightDismissEnabled="True">
+            <Border Background="#121212" BorderBrush="Gray" BorderThickness="1"
+                    Padding="15" Width="350" Height="150">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="mutateBinary 0.2.1" FontWeight="Bold" FontSize="14"/>
+                    <TextBlock Text="File to Binary to DNA converter with mutation functionality." TextWrapping="Wrap"/>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="GitHub" Click="OpenGitHub_Click" />
+                        <Button Content="Close" Click="ClosePopup_Click" />
                     </StackPanel>
-                    <NumericUpDown Value="{Binding MenuPointValue, Mode=TwoWay}"
-                                   Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
-                                   FormatString="F5" Width="150" VerticalAlignment="Bottom" />
                 </StackPanel>
-
-                <!-- Block 2: Frameshift -->
-                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="10">
-                    <StackPanel Width="190">
-                        <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
-                            <TextBlock Text="Frameshift" VerticalAlignment="Center" />
-                            <Border Width="16" Height="16" CornerRadius="8"
-                                    BorderBrush="Gray" BorderThickness="1"
-                                    Background="Transparent" Cursor="Help"
-                                    ToolTip.Tip="Probability of frameshift. &#10;(ATG-CGT-ACG → ATC-GTA-CG)">
-                                <TextBlock Text="?" FontSize="11" FontWeight="Bold"
-                                           Foreground="Gray"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center" />
-                            </Border>
-                        </StackPanel>
-                        <Slider Value="{Binding MenuFrameshiftValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
-                                SmallChange="0.01" LargeChange="1" />
-                    </StackPanel>
-                    <NumericUpDown Value="{Binding MenuFrameshiftValue, Mode=TwoWay}"
-                                   Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
-                                   FormatString="F5" Width="150" VerticalAlignment="Bottom" />
-                </StackPanel>
-
-                <!-- Block 3: Frame insert / delete -->
-                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="10">
-                    <StackPanel Width="190">
-                        <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
-                            <TextBlock Text="Frame Insert / Delete" VerticalAlignment="Center"
-                                       TextWrapping="NoWrap" />
-                            <Border Width="16" Height="16" CornerRadius="8"
-                                    BorderBrush="Gray" BorderThickness="1"
-                                    Background="Transparent" Cursor="Help"
-                                    ToolTip.Tip="Probability of an indel being deleted or inserted. (ATG-CGT-ACG → ATG-GGC-CGT-ACG)">
-                                <TextBlock Text="?" FontSize="11" FontWeight="Bold"
-                                           Foreground="Gray"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center" />
-                            </Border>
-                        </StackPanel>
-                        <Slider Value="{Binding MenuFrameInsertDeleteValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
-                                SmallChange="0.01" LargeChange="1" />
-                    </StackPanel>
-                    <NumericUpDown Value="{Binding MenuFrameInsertDeleteValue, Mode=TwoWay}"
-                                   Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
-                                   FormatString="F5" Width="150" VerticalAlignment="Bottom" />
-                </StackPanel>
-
-                <!-- Block 4: Duplications -->
-                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="10">
-                    <StackPanel Width="190">
-                        <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
-                            <TextBlock Text="Duplications" VerticalAlignment="Center"
-                                       TextWrapping="NoWrap" />
-                            <Border Width="16" Height="16" CornerRadius="8"
-                                    BorderBrush="Gray" BorderThickness="1"
-                                    Background="Transparent" Cursor="Help"
-                                    ToolTip.Tip="Probability of a chromosome segment being duplicated. &#10;(ABCDEF → ABCDEFDEF)">
-                                <TextBlock Text="?" FontSize="11" FontWeight="Bold"
-                                           Foreground="Gray"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center" />
-                            </Border>
-                        </StackPanel>
-                        <Slider Value="{Binding MenuDuplicationsValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
-                                SmallChange="0.01" LargeChange="1" />
-                    </StackPanel>
-                    <NumericUpDown Value="{Binding MenuDuplicationsValue, Mode=TwoWay}"
-                                   Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
-                                   FormatString="F5" Width="150" VerticalAlignment="Bottom" />
-                </StackPanel>
-
-                <!-- Block 5: Deletion -->
-                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="10">
-                    <StackPanel Width="190">
-                        <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
-                            <TextBlock Text="Deletion" VerticalAlignment="Center" TextWrapping="NoWrap" />
-                            <Border Width="16" Height="16" CornerRadius="8"
-                                    BorderBrush="Gray" BorderThickness="1"
-                                    Background="Transparent" Cursor="Help"
-                                    ToolTip.Tip="Probability of a chromosome segment being deleted. &#10;(ABCDEF → ABEF)">
-                                <TextBlock Text="?" FontSize="11" FontWeight="Bold"
-                                           Foreground="Gray"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center" />
-                            </Border>
-                        </StackPanel>
-                        <Slider Value="{Binding MenuDeletionValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
-                                SmallChange="0.01" LargeChange="1" />
-                    </StackPanel>
-                    <NumericUpDown Value="{Binding MenuDeletionValue, Mode=TwoWay}"
-                                   Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
-                                   FormatString="F5" Width="150" VerticalAlignment="Bottom" />
-                </StackPanel>
-
-                <!-- Block 6: Inversion -->
-                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="10">
-                    <StackPanel Width="190">
-                        <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
-                            <TextBlock Text="Inversion" VerticalAlignment="Center" TextWrapping="NoWrap" />
-                            <Border Width="16" Height="16" CornerRadius="8"
-                                    BorderBrush="Gray" BorderThickness="1"
-                                    Background="Transparent" Cursor="Help"
-                                    ToolTip.Tip="Probability of a chromosome segment being inverted. &#10;(ABCDEF → ABEDCF)">
-                                <TextBlock Text="?" FontSize="11" FontWeight="Bold"
-                                           Foreground="Gray"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center" />
-                            </Border>
-                        </StackPanel>
-                        <Slider Value="{Binding MenuInversionValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
-                                SmallChange="0.01" LargeChange="1" />
-                    </StackPanel>
-                    <NumericUpDown Value="{Binding MenuInversionValue, Mode=TwoWay}"
-                                   Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
-                                   FormatString="F5" Width="150" VerticalAlignment="Bottom" />
-                </StackPanel>
-
-                <!-- Block 7: Translocation -->
-                <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Spacing="10">
-                    <StackPanel Width="190">
-                        <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
-                            <TextBlock Text="Translocation" VerticalAlignment="Center"
-                                       TextWrapping="NoWrap" />
-                            <Border Width="16" Height="16" CornerRadius="8"
-                                    BorderBrush="Gray" BorderThickness="1"
-                                    Background="Transparent" Cursor="Help"
-                                    ToolTip.Tip="Probability of translocating chromosomes to a different position within the sequence. &#10;(ABCDEF → ABDFEC)">
-                                <TextBlock Text="?" FontSize="11" FontWeight="Bold"
-                                           Foreground="Gray"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center" />
-                            </Border>
-                        </StackPanel>
-                        <Slider Value="{Binding MenuTranslocationValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
-                                SmallChange="0.01" LargeChange="1" />
-                    </StackPanel>
-                    <NumericUpDown Value="{Binding MenuTranslocationValue, Mode=TwoWay}"
-                                   Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
-                                   FormatString="F5" Width="150" VerticalAlignment="Bottom" />
-                </StackPanel>
-
- <!-- Block 8: Cycles & Repetitions -->
-<StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
-            Orientation="Horizontal" Spacing="40"
-            VerticalAlignment="Bottom">
-
-    <!-- Evolutions -->
-    <StackPanel>
-        <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
-            <TextBlock Text="Evolutions" VerticalAlignment="Center" />
-            <Border Width="16" Height="16" CornerRadius="8"
-                    BorderBrush="Gray" BorderThickness="1"
-                    Background="Transparent" Cursor="Help"
-                    ToolTip.Tip="How often do you want to mutate the DNA file with given parameters?">
-                <TextBlock Text="?" FontSize="11" FontWeight="Bold"
-                           Foreground="Gray"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center" />
             </Border>
-        </StackPanel>
-        <NumericUpDown Value="{Binding MenuCyclesValue, Mode=TwoWay}"
-                       Minimum="1" Increment="1"
-                       FormatString="F0" Width="150"
-                       HorizontalAlignment="Left" />
-    </StackPanel>
+        </Popup>
 
-    <!-- Repetitions -->
-    <StackPanel>
-        <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
-            <TextBlock Text="Repetitions" VerticalAlignment="Center" />
-            <Border Width="16" Height="16" CornerRadius="8"
-                    BorderBrush="Gray" BorderThickness="1"
-                    Background="Transparent" Cursor="Help"
-                    ToolTip.Tip="Additional mutation runs per file. Creates multiple output files. &#10;0 = 1 output, 1 = 2 outputs, 3 = 4 outputs, etc.">
-                <TextBlock Text="?" FontSize="11" FontWeight="Bold"
-                           Foreground="Gray"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center" />
-            </Border>
-        </StackPanel>
-        <NumericUpDown Value="{Binding MenuRepetitionValue, Mode=TwoWay}"
-                       Minimum="0" Increment="1"
-                       FormatString="F0" Width="150"
-                       HorizontalAlignment="Left" />
-    </StackPanel>
+        <ScrollViewer>
+            <StackPanel Margin="20" Spacing="10">
 
-</StackPanel>
+                <TextBlock Text="{Binding $parent[Window].Title}" FontSize="18" FontWeight="Bold" />
+
+                <Button Content="Select folder..."
+                        Command="{Binding PickFolderCommand}"
+                        Background="DarkSlateBlue" Foreground="White" />
+
+                <Button Content="Open selected folder"
+                        Command="{Binding OpenSelectedDirectoryCommand}"
+                        Background="DarkSlateBlue" Foreground="White" />
 
 
-            </Grid>
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto"
+                      ColumnDefinitions="*,*"
+                      RowSpacing="10"
+                      ColumnSpacing="20"
+                      Margin="0,20,0,10">
 
-
-            <!-- Mutate button-->
-
-            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
-                <Button Content="Mutate data"
-                        Command="{Binding MutateDataCommand}"
-                        Background="Yellow" Foreground="Black" Margin="0,10,20,0" />
-            </StackPanel>
-
-
-            <!-- Debugging expander -->
-
-
-            <Expander Header="Debugging Info" Width="500" IsExpanded="False">
-
- 
-                <StackPanel Spacing="10">
-
-                    <TextBlock Text="Current directory:" FontWeight="Bold" />
-                    <TextBlock Text="{Binding SelectedFolderPath}" Foreground="Gray" TextWrapping="Wrap" />
-
-                    <Separator />
-
-                    <TextBlock Text="Data found:" FontWeight="Bold" />
-
-                    <!-- List of data -->
-                     
-                    <ListBox ItemsSource="{Binding FoundFiles}" Height="200">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <ScrollViewer>
-                                <TextBlock Text="{Binding}" />
-                                </ScrollViewer>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-
-                    <!-- Action buttons -->
-                    <StackPanel Orientation="Horizontal" Spacing="10">
-                        <Button Content="Code data to DNA"
-                                Command="{Binding EncodeFilesToDNACommand}"
-                                Background="DarkSlateBlue" Foreground="White" />
-
-                        <Button Content="Decode DNA to data"
-                                Command="{Binding DecodeFilesCommand}"
-                                Background="DarkSlateBlue" Foreground="White" />
-
-                        <Button Content="Print Debug"
-                                Command="{Binding PrintDebugLogCommand}"
-                                Background="DarkSlateBlue" Foreground="White" />
+                    <!-- Block 1: Point -->
+                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                        <StackPanel Width="190">
+                            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
+                                <TextBlock Text="Point" VerticalAlignment="Center" />
+                                <Border Width="16" Height="16" CornerRadius="8"
+                                        BorderBrush="Gray" BorderThickness="1"
+                                        Background="Transparent" Cursor="Help"
+                                        ToolTip.Tip="Probability of point mutations. A single base is replaced by another. &#10;(GCA → GCC)">
+                                    <TextBlock Text="?" FontSize="11" FontWeight="Bold"
+                                               Foreground="Gray"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                </Border>
+                            </StackPanel>
+                            <Slider Value="{Binding MenuPointValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
+                                    SmallChange="0.01" LargeChange="1" />
+                        </StackPanel>
+                        <NumericUpDown Value="{Binding MenuPointValue, Mode=TwoWay}"
+                                       Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
+                                       FormatString="F5" Width="150" VerticalAlignment="Bottom" />
                     </StackPanel>
 
+                    <!-- Block 2: Frameshift -->
+                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                        <StackPanel Width="190">
+                            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
+                                <TextBlock Text="Frameshift" VerticalAlignment="Center" />
+                                <Border Width="16" Height="16" CornerRadius="8"
+                                        BorderBrush="Gray" BorderThickness="1"
+                                        Background="Transparent" Cursor="Help"
+                                        ToolTip.Tip="Probability of frameshift. &#10;(ATG-CGT-ACG → ATC-GTA-CG)">
+                                    <TextBlock Text="?" FontSize="11" FontWeight="Bold"
+                                               Foreground="Gray"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                </Border>
+                            </StackPanel>
+                            <Slider Value="{Binding MenuFrameshiftValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
+                                    SmallChange="0.01" LargeChange="1" />
+                        </StackPanel>
+                        <NumericUpDown Value="{Binding MenuFrameshiftValue, Mode=TwoWay}"
+                                       Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
+                                       FormatString="F5" Width="150" VerticalAlignment="Bottom" />
+                    </StackPanel>
+
+                    <!-- Block 3: Frame insert / delete -->
+                    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                        <StackPanel Width="190">
+                            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
+                                <TextBlock Text="Frame Insert / Delete" VerticalAlignment="Center"
+                                           TextWrapping="NoWrap" />
+                                <Border Width="16" Height="16" CornerRadius="8"
+                                        BorderBrush="Gray" BorderThickness="1"
+                                        Background="Transparent" Cursor="Help"
+                                        ToolTip.Tip="Probability of an indel being deleted or inserted. (ATG-CGT-ACG → ATG-GGC-CGT-ACG)">
+                                    <TextBlock Text="?" FontSize="11" FontWeight="Bold"
+                                               Foreground="Gray"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                </Border>
+                            </StackPanel>
+                            <Slider Value="{Binding MenuFrameInsertDeleteValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
+                                    SmallChange="0.01" LargeChange="1" />
+                        </StackPanel>
+                        <NumericUpDown Value="{Binding MenuFrameInsertDeleteValue, Mode=TwoWay}"
+                                       Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
+                                       FormatString="F5" Width="150" VerticalAlignment="Bottom" />
+                    </StackPanel>
+
+                    <!-- Block 4: Duplications -->
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                        <StackPanel Width="190">
+                            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
+                                <TextBlock Text="Duplications" VerticalAlignment="Center"
+                                           TextWrapping="NoWrap" />
+                                <Border Width="16" Height="16" CornerRadius="8"
+                                        BorderBrush="Gray" BorderThickness="1"
+                                        Background="Transparent" Cursor="Help"
+                                        ToolTip.Tip="Probability of a chromosome segment being duplicated. &#10;(ABCDEF → ABCDEFDEF)">
+                                    <TextBlock Text="?" FontSize="11" FontWeight="Bold"
+                                               Foreground="Gray"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                </Border>
+                            </StackPanel>
+                            <Slider Value="{Binding MenuDuplicationsValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
+                                    SmallChange="0.01" LargeChange="1" />
+                        </StackPanel>
+                        <NumericUpDown Value="{Binding MenuDuplicationsValue, Mode=TwoWay}"
+                                       Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
+                                       FormatString="F5" Width="150" VerticalAlignment="Bottom" />
+                    </StackPanel>
+
+                    <!-- Block 5: Deletion -->
+                    <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                        <StackPanel Width="190">
+                            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
+                                <TextBlock Text="Deletion" VerticalAlignment="Center" TextWrapping="NoWrap" />
+                                <Border Width="16" Height="16" CornerRadius="8"
+                                        BorderBrush="Gray" BorderThickness="1"
+                                        Background="Transparent" Cursor="Help"
+                                        ToolTip.Tip="Probability of a chromosome segment being deleted. &#10;(ABCDEF → ABEF)">
+                                    <TextBlock Text="?" FontSize="11" FontWeight="Bold"
+                                               Foreground="Gray"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                </Border>
+                            </StackPanel>
+                            <Slider Value="{Binding MenuDeletionValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
+                                    SmallChange="0.01" LargeChange="1" />
+                        </StackPanel>
+                        <NumericUpDown Value="{Binding MenuDeletionValue, Mode=TwoWay}"
+                                       Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
+                                       FormatString="F5" Width="150" VerticalAlignment="Bottom" />
+                    </StackPanel>
+
+                    <!-- Block 6: Inversion -->
+                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                        <StackPanel Width="190">
+                            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
+                                <TextBlock Text="Inversion" VerticalAlignment="Center" TextWrapping="NoWrap" />
+                                <Border Width="16" Height="16" CornerRadius="8"
+                                        BorderBrush="Gray" BorderThickness="1"
+                                        Background="Transparent" Cursor="Help"
+                                        ToolTip.Tip="Probability of a chromosome segment being inverted. &#10;(ABCDEF → ABEDCF)">
+                                    <TextBlock Text="?" FontSize="11" FontWeight="Bold"
+                                               Foreground="Gray"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                </Border>
+                            </StackPanel>
+                            <Slider Value="{Binding MenuInversionValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
+                                    SmallChange="0.01" LargeChange="1" />
+                        </StackPanel>
+                        <NumericUpDown Value="{Binding MenuInversionValue, Mode=TwoWay}"
+                                       Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
+                                       FormatString="F5" Width="150" VerticalAlignment="Bottom" />
+                    </StackPanel>
+
+                    <!-- Block 7: Translocation -->
+                    <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                        <StackPanel Width="190">
+                            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
+                                <TextBlock Text="Translocation" VerticalAlignment="Center"
+                                           TextWrapping="NoWrap" />
+                                <Border Width="16" Height="16" CornerRadius="8"
+                                        BorderBrush="Gray" BorderThickness="1"
+                                        Background="Transparent" Cursor="Help"
+                                        ToolTip.Tip="Probability of translocating chromosomes to a different position within the sequence. &#10;(ABCDEF → ABDFEC)">
+                                    <TextBlock Text="?" FontSize="11" FontWeight="Bold"
+                                               Foreground="Gray"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                </Border>
+                            </StackPanel>
+                            <Slider Value="{Binding MenuTranslocationValue, Mode=TwoWay}" Minimum="0.0000" Maximum="100.0000"
+                                    SmallChange="0.01" LargeChange="1" />
+                        </StackPanel>
+                        <NumericUpDown Value="{Binding MenuTranslocationValue, Mode=TwoWay}"
+                                       Minimum="0.0000" Maximum="100.0000" Increment="0.0001"
+                                       FormatString="F5" Width="150" VerticalAlignment="Bottom" />
+                    </StackPanel>
+
+                    <!-- Block 8: Cycles & Repetitions -->
+                    <StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
+                                Orientation="Horizontal" Spacing="40"
+                                VerticalAlignment="Bottom">
+
+                        <!-- Evolutions -->
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
+                                <TextBlock Text="Evolutions" VerticalAlignment="Center" />
+                                <Border Width="16" Height="16" CornerRadius="8"
+                                        BorderBrush="Gray" BorderThickness="1"
+                                        Background="Transparent" Cursor="Help"
+                                        ToolTip.Tip="How often do you want to mutate the DNA file with given parameters?">
+                                    <TextBlock Text="?" FontSize="11" FontWeight="Bold"
+                                               Foreground="Gray"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                </Border>
+                            </StackPanel>
+                            <NumericUpDown Value="{Binding MenuCyclesValue, Mode=TwoWay}"
+                                           Minimum="1" Increment="1"
+                                           FormatString="F0" Width="150"
+                                           HorizontalAlignment="Left" />
+                        </StackPanel>
+
+                        <!-- Repetitions -->
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,0,5">
+                                <TextBlock Text="Repetitions" VerticalAlignment="Center" />
+                                <Border Width="16" Height="16" CornerRadius="8"
+                                        BorderBrush="Gray" BorderThickness="1"
+                                        Background="Transparent" Cursor="Help"
+                                        ToolTip.Tip="Additional mutation runs per file. Creates multiple output files. &#10;0 = 1 output, 1 = 2 outputs, 3 = 4 outputs, etc.">
+                                    <TextBlock Text="?" FontSize="11" FontWeight="Bold"
+                                               Foreground="Gray"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                </Border>
+                            </StackPanel>
+                            <NumericUpDown Value="{Binding MenuRepetitionValue, Mode=TwoWay}"
+                                           Minimum="0" Increment="1"
+                                           FormatString="F0" Width="150"
+                                           HorizontalAlignment="Left" />
+                        </StackPanel>
+
+                    </StackPanel>
+
+
+                </Grid>
+
+
+                <!-- Mutate button-->
+
+                <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
+                    <Button Content="Cancel Run"
+                            Command="{Binding CancelMutationCommand}"
+                            Background="Yellow" Foreground="Black" Margin="0,10,5,0" />
+                    <Button Content="Mutate data"
+                            Command="{Binding MutateDataCommand}"
+                            Background="Yellow" Foreground="Black" Margin="0,10,20,0" />
                 </StackPanel>
 
-            </Expander>
 
-        </StackPanel>
-</ScrollViewer>
-</Panel>
+                <!-- Debugging expander -->
+
+
+                <Expander Header="Debugging Info" Width="720" IsExpanded="False" Margin="0,10,0,0">
+
+
+                    <StackPanel Spacing="10">
+
+                        <TextBlock Text="Current directory:" FontWeight="Bold" />
+                        <TextBlock Text="{Binding SelectedFolderPath}" Foreground="Gray" TextWrapping="Wrap" />
+
+                        <Separator />
+
+                        <TextBlock Text="Data found:" FontWeight="Bold" />
+
+                        <!-- List of data -->
+
+                        <ListBox ItemsSource="{Binding FoundFiles}" Height="200">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <ScrollViewer>
+                                        <TextBlock Text="{Binding}" />
+                                    </ScrollViewer>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <!-- Action buttons -->
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Button Content="Code data to DNA"
+                                    Command="{Binding EncodeFilesToDNACommand}"
+                                    Background="DarkSlateBlue" Foreground="White" />
+
+                            <Button Content="Decode DNA to data"
+                                    Command="{Binding DecodeFilesCommand}"
+                                    Background="DarkSlateBlue" Foreground="White" />
+
+                            <Button Content="Print Debug"
+                                    Command="{Binding PrintDebugLogCommand}"
+                                    Background="DarkSlateBlue" Foreground="White" />
+                        </StackPanel>
+
+                    </StackPanel>
+
+                </Expander>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Panel>
 </Window>
