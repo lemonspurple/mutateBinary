@@ -3,7 +3,7 @@
         xmlns:vm="using:mutateBinary.ViewModels"
         x:Class="mutateBinary.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="mutateBinary 0.2.2"
+        Title="mutateBinary 1.0.2"
         Icon="/Assets/logo.ico"
         Width="780" Height="670"
         MinWidth="780" MinHeight="670">
