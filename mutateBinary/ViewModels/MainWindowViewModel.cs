@@ -15,7 +15,6 @@ using Avalonia.Controls;
 using System;
 using System.Threading;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
