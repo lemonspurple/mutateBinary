@@ -132,9 +132,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         foreach (var file in rawfiles)
         {
-            // fetch filename without old path
-            string fileName = Path.GetFileName(file);  // "photo.jpg"
-            // start conversion
+
             var mapping = BuildDnaMapping();
             await Task.Run(() => manager.ConvertFileToDNA(file, outputFolderDNA, mapping));
         }
@@ -200,7 +198,7 @@ public partial class MainWindowViewModel : ViewModelBase
     
     //Helper method to cancel mutation process via finally block
     [RelayCommand]
-    public void CancelMutationAsync() 
+    public void CancelMutation() 
     {
         cts?.Cancel(); 
     }
