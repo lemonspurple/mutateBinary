@@ -2,6 +2,7 @@
 
 using mutateBinary.Models.Functions;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.IO;
 using Avalonia;
@@ -26,24 +27,21 @@ public partial class MainWindowViewModel : ViewModelBase
 
     // Mutate values
     // generator will turn _menuPointValue into MenuPointValue.
-    [ObservableProperty]
-    private float _menuPointValue = default;
-    [ObservableProperty]
-    private float _menuFrameshiftValue = default;
-    [ObservableProperty]
-    private float _menuFrameInsertDeleteValue = default;
-    [ObservableProperty]
-    private float _menuDuplicationsValue = default;
-    [ObservableProperty]
-    private float _menuDeletionValue = default;
-    [ObservableProperty]
-    private float _menuInversionValue = default;
-    [ObservableProperty]
-    private float _menuTranslocationValue = default;
-    [ObservableProperty]
-    private int _menuCyclesValue = 1;
-    [ObservableProperty]
-    private int _menuRepetitionValue = 0;
+    [ObservableProperty] private float _menuPointValue = default;
+    [ObservableProperty] private float _menuFrameshiftValue = default;
+    [ObservableProperty] private float _menuFrameInsertDeleteValue = default;
+    [ObservableProperty] private float _menuDuplicationsValue = default;
+    [ObservableProperty] private float _menuDeletionValue = default;
+    [ObservableProperty] private float _menuInversionValue = default;
+    [ObservableProperty] private float _menuTranslocationValue = default;
+    [ObservableProperty] private int _menuCyclesValue = 1;
+    [ObservableProperty] private int _menuRepetitionValue = 0;
+    // DNA Mapping values
+    [ObservableProperty] private string _mapping00 = "A";
+    [ObservableProperty] private string _mapping01 = "C";
+    [ObservableProperty] private string _mapping10 = "G";
+    [ObservableProperty] private string _mapping11 = "T";
+    public IReadOnlyList<string> DnaBases { get; } = new[] { "A", "T", "C", "G" };  
 
     // Helper method that adds parameter values to filename as methodology. 
     private string BuildMutationSuffix(int repetitionIndex)
@@ -58,9 +56,14 @@ public partial class MainWindowViewModel : ViewModelBase
         if (MenuTranslocationValue != 0) sb.Append($"_tr{MenuTranslocationValue}");
         sb.Append($"_c{MenuCyclesValue}");
         sb.Append($"_r{repetitionIndex}");
+        sb.Append(BuildDnaMapping().ToSuffix());
         return sb.ToString();
     }
-
+    // Helper method that abuilds a DNA mapping object based on the current menu values.
+    private DnaMapping BuildDnaMapping() => new DnaMapping {
+        Map00 = Mapping00[0], Map01 = Mapping01[0],
+        Map10 = Mapping10[0], Map11 = Mapping11[0]
+    };
 
     [RelayCommand]
     public async Task PickFolderAsync()
@@ -130,9 +133,9 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             // fetch filename without old path
             string fileName = Path.GetFileName(file);  // "photo.jpg"
-            //TODO FIX NAMING. THE SUFFIX HAS TO BE CACHED SOMEWHERE
             // start conversion
-            await Task.Run(() => manager.ConvertFileToDNA(file, outputFolderDNA));
+            var mapping = BuildDnaMapping();
+            await Task.Run(() => manager.ConvertFileToDNA(file, outputFolderDNA, mapping));
         }
 
         Console.WriteLine($"Debug: All data has been encoded to DNA \n (directory: {outputFolderDNA})");
@@ -262,8 +265,9 @@ public partial class MainWindowViewModel : ViewModelBase
             string dnaPath = Path.Combine(dnaFolder, fileName + ".dna");
 
             // Ensure DNA file exists
+            var mapping = BuildDnaMapping();
             if (!File.Exists(dnaPath))
-                await Task.Run(() => manager.ConvertFileToDNA(file, dnaFolder));
+                await Task.Run(() => manager.ConvertFileToDNA(file, dnaFolder, mapping));
 
             // Repetition loop: create multiple output files
             for (int repetitionIndex = 0; repetitionIndex <= MenuRepetitionValue; repetitionIndex++)
@@ -301,5 +305,10 @@ public partial class MainWindowViewModel : ViewModelBase
         }
 
         Console.WriteLine($"Debug: Mutation complete - {files.Count} files × {totalOutputs} outputs = {files.Count * totalOutputs} total outputs (directory: {outputFolder})");
+    }
+
+    [RelayCommand]
+    public void RestoreDefaultMapping() {
+        Mapping00 = "A"; Mapping01 = "C"; Mapping10 = "G"; Mapping11 = "T";
     }
 }

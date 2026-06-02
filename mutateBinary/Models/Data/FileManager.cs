@@ -41,7 +41,7 @@ namespace mutateBinary.Models.Data
 
         // ### Encoding
 
-        public void ConvertFileToDNA(string sourcePath, string targetDirectory)
+        public void ConvertFileToDNA(string sourcePath, string targetDirectory, DnaMapping? mapping = null)
         {
             try
             {
@@ -63,10 +63,10 @@ namespace mutateBinary.Models.Data
                         // It would work otherwise too, but require the entire file to be processed in ram
                         // instead of cpu. It is nondestructive
 
-                        sw.Write(FileToDNAMapper((b >> 6) & 0b11));
-                        sw.Write(FileToDNAMapper((b >> 4) & 0b11));
-                        sw.Write(FileToDNAMapper((b >> 2) & 0b11));
-                        sw.Write(FileToDNAMapper(b & 0b11));
+                        sw.Write(FileToDNAMapper((b >> 6) & 0b11, mapping));
+                        sw.Write(FileToDNAMapper((b >> 4) & 0b11, mapping));
+                        sw.Write(FileToDNAMapper((b >> 2) & 0b11, mapping));
+                        sw.Write(FileToDNAMapper(b & 0b11, mapping));
                     }
                 }
             }
@@ -77,12 +77,12 @@ namespace mutateBinary.Models.Data
         }
 
         // Mapping Bits to DNA   A: 00, T: 11, C: 01, G: 10
-        private static char FileToDNAMapper(int twoBits) => twoBits switch
+        private static char FileToDNAMapper(int twoBits, DnaMapping? mapping) => twoBits switch
         {
-            0b00 => 'A',
-            0b11 => 'T',
-            0b01 => 'C',
-            0b10 => 'G',
+            0b00 => mapping?.Map00 ?? 'A',
+            0b01 => mapping?.Map01 ?? 'C',
+            0b10 => mapping?.Map10 ?? 'G',
+            0b11 => mapping?.Map11 ?? 'T',
             _ => throw new NotImplementedException("Not a bit")
         };
 
