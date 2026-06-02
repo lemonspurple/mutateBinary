@@ -43,7 +43,7 @@ namespace mutateBinary.Models.Functions
         float translocationValue = default;
         int cyclesValue = default;
         int repetitionValue = default;
-        private static readonly Random rng = new Random();
+        private static Random rng => Random.Shared;
 
         /* ---------------------------------------------------
                 Constructor to draw values from UI

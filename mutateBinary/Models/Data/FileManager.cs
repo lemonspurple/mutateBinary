@@ -88,7 +88,7 @@ namespace mutateBinary.Models.Data
 
         // #### Decoding
 
-        public void ConvertDNAToFile(string sourcePath, string targetDirectory)
+        public void ConvertDNAToFile(string sourcePath, string targetDirectory, DnaMapping? mapping = null)
         {
 
             try
@@ -108,10 +108,10 @@ namespace mutateBinary.Models.Data
 
                         // every base delivers two bits back
                         int reconstructedByte =
-                            (DNAToFileMapper(buffer[0]) << 6) |
-                            (DNAToFileMapper(buffer[1]) << 4) |
-                            (DNAToFileMapper(buffer[2]) << 2) |
-                            DNAToFileMapper(buffer[3]);
+                            (DNAToFileMapper(buffer[0], mapping) << 6) |
+                            (DNAToFileMapper(buffer[1], mapping) << 4) |
+                            (DNAToFileMapper(buffer[2], mapping) << 2) |
+                            DNAToFileMapper(buffer[3], mapping);
 
                         fsTarget.WriteByte((byte)reconstructedByte);
                     }
@@ -124,14 +124,22 @@ namespace mutateBinary.Models.Data
         }
 
         // Reverse Mapping DNA to Bits   00: A, 11: T, 01: C, 10: G
-        private static int DNAToFileMapper(char DNA) => DNA switch
+        private static int DNAToFileMapper(char dna, DnaMapping? mapping)
         {
-            'A' => 0b00,
-            'T' => 0b11,
-            'C' => 0b01,
-            'G' => 0b10,
-            _ => throw new NotImplementedException("No valid DNA input. Must be either (A,T,C or G)")
-        };
+            if (mapping != null)
+            {
+                if (dna == mapping.Map00) return 0b00;
+                if (dna == mapping.Map01) return 0b01;
+                if (dna == mapping.Map10) return 0b10;
+                if (dna == mapping.Map11) return 0b11;
+                throw new NotImplementedException($"No valid DNA input for custom mapping: {dna}");
+            }
+            return dna switch
+            {
+                'A' => 0b00, 'T' => 0b11, 'C' => 0b01, 'G' => 0b10,
+                _ => throw new NotImplementedException("No valid DNA input.")
+            };
+        }
 
     }
 }

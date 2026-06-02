@@ -42,6 +42,8 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty] private string _mapping10 = "G";
     [ObservableProperty] private string _mapping11 = "T";
     public IReadOnlyList<string> DnaBases { get; } = new[] { "A", "T", "C", "G" };  
+    // Multithreading toggle
+    [ObservableProperty] private bool _disableMultithreading = false;
 
     // Helper method that adds parameter values to filename as methodology. 
     private string BuildMutationSuffix(int repetitionIndex)
@@ -190,29 +192,23 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             Console.WriteLine("Mutation process was cancelled.");
         }
-    }
-
-    [RelayCommand]
-    public async Task CancelMutationAsync()
-    {
-        if (cts != null && !cts.IsCancellationRequested)
+        finally
         {
-            cts.Cancel();
             cts.Dispose();
-            Console.WriteLine("Cancellation requested for mutation process.");
+            cts = null;
         }
+    }
+    
+    //Helper method to cancel mutation process via finally block
+    [RelayCommand]
+    public void CancelMutationAsync() 
+    {
+        cts?.Cancel(); 
     }
 
     private async Task MutationProcessChain(CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(SelectedFolderPath)) return;
-
-        // Guard against negative repetition values
-        if (MenuRepetitionValue < 0)
-        {
-            Console.WriteLine("Error: Repetition value cannot be negative");
-            return;
-        }
 
         // self healing segment that creates DNA folders, in case it hasn't yet.
         string outputFolder = Path.Combine(SelectedFolderPath, "mutated");
@@ -227,8 +223,8 @@ public partial class MainWindowViewModel : ViewModelBase
             MenuDuplicationsValue, MenuDeletionValue, MenuInversionValue,
             MenuTranslocationValue, MenuCyclesValue, MenuRepetitionValue
         );
-
         var manager = new FileManager();
+        var mapping = BuildDnaMapping();
         var allFiles = manager.GetFilesInFolder(SelectedFolderPath);
 
         Console.WriteLine($"Debug: Selected folder: {SelectedFolderPath}");
@@ -257,51 +253,36 @@ public partial class MainWindowViewModel : ViewModelBase
         int totalOutputs = MenuRepetitionValue + 1;
         Console.WriteLine($"Debug: Processing {files.Count} files with {totalOutputs} outputs each (Repetition={MenuRepetitionValue})");
 
+        // Phase 1: Ensure all DNA files exist
         foreach (var file in files)
         {
-            string fileName = Path.GetFileName(file);
-            string baseName = Path.GetFileNameWithoutExtension(file);
-            string extension = Path.GetExtension(file);
-            string dnaPath = Path.Combine(dnaFolder, fileName + ".dna");
-
-            // Ensure DNA file exists
-            var mapping = BuildDnaMapping();
+            string dnaPath = Path.Combine(dnaFolder, Path.GetFileName(file) + ".dna");
             if (!File.Exists(dnaPath))
-                await Task.Run(() => manager.ConvertFileToDNA(file, dnaFolder, mapping));
+                await Task.Run(() => manager.ConvertFileToDNA(file, dnaFolder, mapping), cancellationToken);
+        }
 
-            // Repetition loop: create multiple output files
-            for (int repetitionIndex = 0; repetitionIndex <= MenuRepetitionValue; repetitionIndex++)
-            {
-                // Create unique temp files for this repetition
-                string workingDna = dnaPath + $".r{repetitionIndex}.work";
-                string mutatedDna = workingDna + ".mutated";
+        // Phase 2: Build flat 
+        var workItems = files
+            .SelectMany(file => Enumerable.Range(0, MenuRepetitionValue + 1).Select(r => (file, r)))
+            .ToList();
 
-                // Copy original DNA to working file
-                File.Copy(dnaPath, workingDna, overwrite: true);
-
-                // Mutate
-                await Task.Run(() => mutator.MutateDNAFile(workingDna, mutatedDna));
-
-                // Decode to binary
-                await Task.Run(() => manager.ConvertDNAToFile(mutatedDna, outputFolder));
-
-                // Cleanup temp files
-                File.Delete(workingDna);
-                File.Delete(mutatedDna);
-
-                // Rename decoded file to final name
-                string decodedFile = Path.Combine(outputFolder, Path.GetFileNameWithoutExtension(mutatedDna));
-                string finalName = baseName + "_mutated" + BuildMutationSuffix(repetitionIndex) + extension;
-                string finalPath = Path.Combine(outputFolder, finalName);
-
-                if (File.Exists(finalPath))
-                    File.Delete(finalPath);
-
-                File.Move(decodedFile, finalPath);
-
-                Console.WriteLine($"  → Generated: {finalName}");
-                cancellationToken.ThrowIfCancellationRequested();
-            }
+        // Phase 3: Sequential or parallel
+        if (DisableMultithreading)
+        {
+            foreach (var (file, repIdx) in workItems)
+                await ProcessSingleOutput(file, repIdx, dnaFolder, outputFolder, mutator, manager, mapping, cancellationToken);
+        }
+        else
+        {
+            await Parallel.ForEachAsync(
+                workItems,
+                new ParallelOptions
+                {
+                    MaxDegreeOfParallelism = Environment.ProcessorCount,
+                    CancellationToken = cancellationToken
+                },
+                async (item, ct) => await ProcessSingleOutput(item.file, item.r, dnaFolder, outputFolder, mutator, manager, mapping, ct)
+            );
         }
 
         Console.WriteLine($"Debug: Mutation complete - {files.Count} files × {totalOutputs} outputs = {files.Count * totalOutputs} total outputs (directory: {outputFolder})");
@@ -310,5 +291,44 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     public void RestoreDefaultMapping() {
         Mapping00 = "A"; Mapping01 = "C"; Mapping10 = "G"; Mapping11 = "T";
+    }
+
+    private async Task ProcessSingleOutput(
+        string file, int repetitionIndex,
+        string dnaFolder, string outputFolder,
+        MutateFuncs mutator, FileManager manager, DnaMapping mapping,
+        CancellationToken cancellationToken)
+    {
+        string fileName = Path.GetFileName(file);
+        string baseName = Path.GetFileNameWithoutExtension(file);
+        string extension = Path.GetExtension(file);
+        string dnaPath = Path.Combine(dnaFolder, fileName + ".dna");
+
+        string workingDna = dnaPath + $".r{repetitionIndex}.work";
+        string mutatedDna = workingDna + ".mutated";
+
+        File.Copy(dnaPath, workingDna, overwrite: true);
+
+        try
+        {
+            await Task.Run(() => mutator.MutateDNAFile(workingDna, mutatedDna), cancellationToken);
+            await Task.Run(() => manager.ConvertDNAToFile(mutatedDna, outputFolder, mapping), cancellationToken);
+        }
+        finally
+        {
+            if (File.Exists(workingDna)) File.Delete(workingDna);
+            if (File.Exists(mutatedDna)) File.Delete(mutatedDna);
+        }
+
+        cancellationToken.ThrowIfCancellationRequested();
+
+        string decodedFile = Path.Combine(outputFolder, Path.GetFileNameWithoutExtension(mutatedDna));
+        string finalName = baseName + "_mutated" + BuildMutationSuffix(repetitionIndex) + extension;
+        string finalPath = Path.Combine(outputFolder, finalName);
+
+        if (File.Exists(finalPath)) File.Delete(finalPath);
+        File.Move(decodedFile, finalPath);
+
+        Console.WriteLine($"  → Generated: {finalName}");
     }
 }
