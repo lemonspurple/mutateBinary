@@ -207,7 +207,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (string.IsNullOrEmpty(SelectedFolderPath)) return;
 
-        // self healing segment that creates DNA folders, in case it hasn't yet.
+        // self healing segment that creates DNA folders
         string outputFolder = Path.Combine(SelectedFolderPath, "mutated");
         if (!Directory.Exists(outputFolder))
             Directory.CreateDirectory(outputFolder);
