@@ -5,7 +5,7 @@ The project combines a practical file-processing workflow with biological mutati
 
 ## Executable
 ### [Download here](https://github.com/lemonspurple/mutateBinary/releases)
-Currently OSX, Windows and Mac is supported.
+Currently Windows, Linux and Mac is supported.
 
 ## **How it works**
 - Select a folder with input files.
