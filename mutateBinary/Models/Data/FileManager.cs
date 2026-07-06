@@ -135,9 +135,12 @@ namespace mutateBinary.Models.Data
                 if (dna == mapping.Map11) return 0b11;
                 throw new NotImplementedException($"No valid DNA input for custom mapping: {dna}");
             }
-            return dna switch
+            return Char.ToUpper(dna) switch
             {
-                'A' => 0b00, 'T' => 0b11, 'C' => 0b01, 'G' => 0b10,
+                'A' => 0b00,
+                'T' => 0b11,
+                'C' => 0b01,
+                'G' => 0b10,
                 _ => throw new NotImplementedException("No valid DNA input.")
             };
         }
